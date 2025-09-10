@@ -1,11 +1,11 @@
 import { useFadeUp } from "../../hooks/useFadeUp";
-import logoColor1 from "../../assets/img/logo_propulse.svg";
-import logoColor2 from "../../assets/img/logo_propulse2.svg";
-import logoColor3 from "../../assets/img/logo_propulse_white.png";
-import foto1 from "../../assets/img/jump.jpg";
-import foto2 from "../../assets/img/nike-running.webp";
-import foto3 from "../../assets/img/silueta.webp";
-import foto4 from "../../assets/img/run.jpeg";
+import logoColor1 from "../../assets/img/logos/logo_propulse.svg";
+import logoColor2 from "../../assets/img/logos/logo_propulse2.svg";
+import logoColor3 from "../../assets/img/logos/logo_propulse_white.png";
+import foto1 from "../../assets/img/ejemplos/jump.jpg";
+import foto2 from "../../assets/img/ejemplos/nike-running.webp";
+import foto3 from "../../assets/img/ejemplos/silueta.webp";
+import foto4 from "../../assets/img/ejemplos/run.jpeg";
 
 function Plantilla() {
   // Hook que activa la animación fade-up cuando los elementos entran al viewport
