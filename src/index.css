@@ -23,10 +23,102 @@
   --gradient-dark: linear-gradient(135deg, var(--black), var(--dark-charcoal));
 }
 
-.plantilla {
+/* clase plantillas se eliminara despues */
+.plantilla { 
   color: var(--primary-red) !important;
   font-weight: bold;
 }
+
+/* colores  */
+/* ====== FONDOS ====== */
+.bg-primary { background-color: #dc2626; }
+.bg-primary-light { background-color: #f87171; }
+.bg-primary-dark { background-color: #991b1b; }
+
+.bg-gold { background-color: #f59e0b; }
+.bg-gold-light { background-color: #fcd34d; }
+.bg-gold-dark { background-color: #b45309; }
+
+.bg-pink { background-color: #b4006c; }
+.bg-pink-light { background-color: #e11d48; }
+.bg-pink-dark { background-color: #7f1d1d; }
+
+.bg-charcoal { background-color: #1f2937; }
+.bg-charcoal-light { background-color: #374151; }
+.bg-charcoal-dark { background-color: #111827; }
+
+.bg-silver { background-color: #9ca3af; }
+.bg-silver-light { background-color: #d1d5db; }
+.bg-silver-dark { background-color: #6b7280; }
+
+.bg-black { background-color: #000000; }
+.bg-white { background-color: #ffffff; }
+
+/* Gradientes */
+.bg-gradient-primary { background: linear-gradient(135deg, #dc2626 0%, #f59e0b 100%); }
+.bg-gradient-secondary { background: linear-gradient(135deg, #f5700b 0%, #dc2626 70%, #b4006c 100%); }
+.bg-gradient-dark { background: linear-gradient(135deg, #000000, #1f2937); }
+
+/* ====== TEXTOS ====== */
+.text-primary { color: #dc2626; }
+.text-primary-light { color: #f87171; }
+.text-primary-dark { color: #991b1b; }
+
+.text-gold { color: #f59e0b; }
+.text-gold-light { color: #fcd34d; }
+.text-gold-dark { color: #b45309; }
+
+.text-pink { color: #b4006c; }
+.text-pink-light { color: #e11d48; }
+.text-pink-dark { color: #7f1d1d; }
+
+.text-charcoal { color: #1f2937; }
+.text-charcoal-light { color: #374151; }
+.text-charcoal-dark { color: #111827; }
+
+.text-silver { color: #9ca3af; }
+.text-silver-light { color: #d1d5db; }
+.text-silver-dark { color: #6b7280; }
+
+.text-black { color: #000000; }
+.text-white { color: #ffffff; }
+
+/* Gradientes como texto */
+.text-gradient-primary {
+  background: linear-gradient(135deg, #dc2626 0%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-secondary {
+  background: linear-gradient(135deg, #f5700b 0%, #dc2626 70%, #b4006c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-dark {
+  background: linear-gradient(135deg, #000000, #1f2937);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ====== BORDES ====== */
+.border-primary { border: 2px solid #dc2626; }
+.border-gold { border: 2px solid #f59e0b; }
+.border-pink { border: 2px solid #b4006c; }
+.border-charcoal { border: 2px solid #1f2937; }
+.border-silver { border: 2px solid #9ca3af; }
+.border-black { border: 2px solid #000000; }
+
+/* ====== HOVER ====== */
+.bg-primary:hover { background-color: #991b1b; }
+.bg-gold:hover { background-color: #b45309; }
+.bg-pink:hover { background-color: #7f1d1d; }
+
+.text-primary:hover { color: #991b1b; }
+.text-gold:hover { color: #b45309; }
+.text-pink:hover { color: #7f1d1d; }
+
 
 /* =====================
    GLOBALES
