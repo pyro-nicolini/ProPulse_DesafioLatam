@@ -8,6 +8,7 @@ function Plantilla() {
       {/* TITULOS */}
       <h1 className="text-gradient">Bienvenido a la plantilla H1</h1>
       <h2>Esto es un h2</h2>
+      <p className="subtitle">Subtitulo</p>
       <p>el fondo utiliza una clase llamada .glass</p>
 
       {/* CARD SUELTA */}
@@ -35,6 +36,34 @@ function Plantilla() {
         <div className="card fade-up">
           <h3>Esta es otra card</h3>
           <p>Texto de tu card</p>
+          <div className="flex gap-1">
+            <button className="btn btn-primary">Click Me</button>
+            <button className="btn btn-secondary">Click Me</button>
+          </div>
+        </div>
+      </div>
+
+      {/* GRID 4 COLUMNAS */}
+      <div className="container-cards grid grid-cols-3">
+        <div className="card-white fade-up">
+          <h3>Esta es otra A</h3>
+          <p>El FadeUp aparece cuando lo miras</p>
+          <div className="flex gap-1 f-wrap">
+            <button className="btn btn-primary">Click Me</button>
+            <button className="btn btn-secondary">Click Me</button>
+          </div>
+        </div>
+        <div className="card-white fade-up">
+          <h3>Esta es otra B</h3>
+          <p>El FadeUp aparece cuando lo miras</p>
+          <div className="flex gap-1">
+            <button className="btn btn-primary">Click Me</button>
+            <button className="btn btn-secondary">Click Me</button>
+          </div>
+        </div>
+        <div className="card-white fade-up">
+          <h3>Esta es otra C</h3>
+          <p>El FadeUp aparece cuando lo miras</p>
           <div className="flex gap-1">
             <button className="btn btn-primary">Click Me</button>
             <button className="btn btn-secondary">Click Me</button>
