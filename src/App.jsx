@@ -7,6 +7,7 @@ import { PrivateRoute } from "./routes/PrivateRoute";
 import Navbar from "./componentes/Navbar";
 
 // Public routes
+import Plantilla from "./vistas/publico/Plantilla";
 import Home from "./vistas/publico/Home";
 import Login from "./vistas/publico/Login";
 import Register from "./vistas/publico/Register";
@@ -39,6 +40,7 @@ function App() {
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<Home />} />
+          <Route path="/Plantilla" element={<Plantilla />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/galeria" element={<Galeria />} />

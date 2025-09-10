@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useUser } from "../context/userContext";
 import logo from "../assets/img/logo_color_w.png";
 
@@ -37,6 +37,9 @@ return (
                 )}
                 <Link className="nav-link" to="/">
                     Home
+                </Link>
+                <Link className="nav-link plantilla" to="/plantilla">
+                    Plantilla
                 </Link>
                 <Link className="nav-link" to="/galeria">
                     Productos
