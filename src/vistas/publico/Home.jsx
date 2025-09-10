@@ -1,7 +1,10 @@
-import React from "react";
-
 function Home() {
-  return <div>Home</div>;
+  return (
+    <div>
+      <h1>hola mundo</h1>
+      <button className="btn-primary">Click Me</button>
+    </div>
+  );
 }
 
 export default Home;

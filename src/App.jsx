@@ -28,6 +28,7 @@ import AdminShop from "./vistas/admin/AdminShop";
 import AdminVentas from "./vistas/admin/AdminVentas";
 import AdminProductosForm from "./vistas/admin/AdminProductosForm";
 import AdminProductos from "./vistas/admin/AdminProductos";
+import Contacto from "./vistas/publico/Contacto";
 
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
           <Route path="/producto" element={<Producto />} />
           <Route path="/planes" element={<Planes />} />
           <Route path="/servicios" element={<Servicios />} />
+          <Route path="/contacto" element={<Contacto />} />
 
           {/* Client private routes */}
           <Route

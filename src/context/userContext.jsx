@@ -11,7 +11,7 @@ const mockUser = {
 
 export function UserProvider({ children }) {
   const [user, setUser] = useState(mockUser);
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   return (
     <UserContext.Provider value={{ user, setUser, isAuthenticated, setIsAuthenticated }}>
       {children}
