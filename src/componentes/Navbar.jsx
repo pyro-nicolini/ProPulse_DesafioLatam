@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useUser } from "../context/userContext";
-import logo from "../assets/img/logo_color_w.png";
+import logo from "../assets/img/logos/logo_color_w.png";
 
 const Navbar = () => {
   const { user } = useUser();
