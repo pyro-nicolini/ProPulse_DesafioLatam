@@ -9,8 +9,43 @@
   --black: #000000;
 
   /* Gradientes */
-  --gradient-primary: linear-gradient(135deg, var(--primary-red), var(--primary-gold));
+  --gradient-primary: linear-gradient(135deg, var(--primary-red) 0, var(--primary-gold) 100%);
   --gradient-dark: linear-gradient(135deg, var(--black), var(--dark-charcoal));
+}
+
+.text-gradient {
+    background: var(--gradient-primary);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.btn {
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: var(--gradient-primary);
+    color: var(--white);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--white);
+    border: 2px solid var(--primary-red);
+}
+.btn-secondary:hover {
+    background: var(--primary-red);
+    border-color: var(--primary-red);
+    color: var(--white);
 }
 
 * {
@@ -134,6 +169,98 @@ i {
   transform: translateY(-20px);
   pointer-events: none;
   transition: opacity 0.3s ease, transform 0.3s ease !important;
+}
+
+
+
+/* ===== Card ===== */
+.card {
+    background: var(--dark-charcoal);
+    border: 1px solid rgba(220, 38, 38, 0.2);
+    border-radius: 15px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--gradient-primary);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.card:hover::before {
+    transform: scaleX(1);
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(220, 38, 38, 0.5);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== Card Elements ===== */
+.card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--white);
+}
+
+.card-text {
+    color: var(--light-gray);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--gradient-primary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.card-link {
+    color: var(--primary-red);
+    text-decoration: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.card-link:hover {
+    color: var(--primary-gold);
+}
+
+.m-1 {
+    margin: 1rem;
+}
+.m-2 {
+    margin: 2rem;
+}
+.p-1 {
+    padding: 1rem;
+}
+.p-2 {
+    padding: 2rem;
 }
 
 
