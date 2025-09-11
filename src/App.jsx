@@ -1,7 +1,6 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { UserProvider } from "./context/userContext";
-
+import { UserProvider } from "./context/UserContext";
 
 import { PrivateRoute } from "./routes/PrivateRoute";
 import Navbar from "./componentes/Navbar";
@@ -11,7 +10,7 @@ import Plantilla from "./vistas/publico/Plantilla";
 import Home from "./vistas/publico/Home";
 import Login from "./vistas/publico/Login";
 import Register from "./vistas/publico/Register";
-import Galeria from "./vistas/publico/Galeria";
+import Galeria from "./vistas/publico/GaleriaProductos";
 import Producto from "./vistas/publico/Producto";
 import Planes from "./vistas/publico/Planes";
 import Servicios from "./vistas/publico/Servicios";
@@ -30,7 +29,6 @@ import AdminVentas from "./vistas/admin/AdminVentas";
 import AdminProductosForm from "./vistas/admin/AdminProductosForm";
 import AdminProductos from "./vistas/admin/AdminProductos";
 import Contacto from "./vistas/publico/Contacto";
-
 
 function App() {
   return (
