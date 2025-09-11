@@ -526,12 +526,34 @@ nav > i {
 .card-bg-img {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(220, 38, 38, 0.2);
+  border: 5px solid rgba(255, 166, 0, 0.2);
   border-radius: 15px;
   padding: 2rem;
-  background-size: cover;
+  background-size: 100%;
   background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  transition: all .3s ease-in-out;
 }
+
+/* Parallax Animation */
+@keyframes parallax-move {
+  0% {
+    background-size: 100%;
+  }
+  100% {
+    background-size: 110%;
+  }
+}
+
+.card-bg-img.parallax {
+  animation: parallax-move 1s linear infinite alternate;
+}
+
+.card-bg-img.parallax:hover {
+  animation-play-state: paused;
+}
+
 .card-bg-img::after {
   content: "";
   position: absolute;
@@ -584,19 +606,23 @@ nav > i {
 }
 .card:hover,
 .card-white:hover {
-  transform: translateY(-10px);
+  transform: translateY(-5px);
   border-color: rgba(220, 38, 38, 0.5);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
 }
 
 /* Container */
 .container {
+  max-width: 95%;
+  padding: 1rem;
+  margin: 0 auto;
+}
+.container-1200 {
   width: 90%;
   max-width: 1200px;
   margin: 1rem auto;
 }
 .container-cards {
-  max-width: 1200px;
   margin: 1rem 0;
 }
 
@@ -828,6 +854,10 @@ nav > i {
   gap: 4rem;
 }
 
+.sin-gap {
+  gap: 0 !important;
+}
+
 /* =====================
    GRID SYSTEM (Mobile First)
 ===================== */
@@ -851,6 +881,9 @@ nav > i {
 .grid-cols-5 {
   grid-template-columns: repeat(1, 1fr);
 }
+.grid-cols-6 {
+  grid-template-columns: repeat(1, 1fr);
+}
 
 /* Tablet */
 @media (min-width: 768px) {
@@ -866,6 +899,9 @@ nav > i {
   .grid-cols-5 {
     grid-template-columns: repeat(3, 1fr);
   }
+  .grid-cols-6 {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 /* Laptop */
@@ -879,6 +915,9 @@ nav > i {
   .grid-cols-5 {
     grid-template-columns: repeat(4, 1fr);
   }
+  .grid-cols-6 {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 /* Desktop grande */
@@ -888,6 +927,9 @@ nav > i {
   }
   .grid-cols-5 {
     grid-template-columns: repeat(5, 1fr);
+  }
+  .grid-cols-6 {
+    grid-template-columns: repeat(6, 1fr);
   }
 }
 
@@ -899,6 +941,9 @@ nav > i {
   .grid-cols-3,
   .grid-cols-4,
   .grid-cols-5 {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .grid-cols-6 {
     grid-template-columns: repeat(1, 1fr);
   }
   .flex-col-responsive {
@@ -920,6 +965,9 @@ nav > i {
   .grid-cols-5 {
     grid-template-columns: repeat(3, 1fr);
   }
+  .grid-cols-6 {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 @media (min-width: 1025px) and (max-width: 1280px) {
@@ -927,6 +975,9 @@ nav > i {
     grid-template-columns: repeat(3, 1fr);
   }
   .grid-cols-5 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .grid-cols-6 {
     grid-template-columns: repeat(4, 1fr);
   }
 }
