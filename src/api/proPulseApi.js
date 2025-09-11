@@ -1,10 +1,8 @@
-// src/api/marketplaceApi.js
 import axios from "axios";
 
 const API = axios.create({
   baseURL: "http://localhost:3000/api"
 });
-
 
 // Interceptor: agrega token si existe
 API.interceptors.request.use((config) => {
@@ -38,7 +36,7 @@ export const createProduct = (data) => API.post("/admin/productos", data);
 export const updateProduct = (id, data) => API.put(`/admin/productos/${id}`, data);
 export const deleteProduct = (id) => API.delete(`/admin/productos/${id}`);
 export const setProductFeatured = (id, destacado) =>
-  API.put(`/admin/productos/${id}/destacado`, { destacado });
+  API.put(`/admin/productos/${id}/destacado`, { destacado })      ;
 
 
 // ========== CARRITO ==========
