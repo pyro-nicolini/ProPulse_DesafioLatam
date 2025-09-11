@@ -1,6 +1,7 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AppProviders from "./AppProviders";
+import { UserProvider } from "./context/UserContext";
+
 import { PrivateRoute } from "./routes/PrivateRoute";
 import Navbar from "./componentes/Navbar";
 
@@ -9,12 +10,10 @@ import Plantilla from "./vistas/publico/Plantilla";
 import Home from "./vistas/publico/Home";
 import Login from "./vistas/publico/Login";
 import Register from "./vistas/publico/Register";
-import Productos from "./vistas/publico/GaleriaProductos";
-import Servicios from "./vistas/publico/GaleriaServicios";
+import Galeria from "./vistas/publico/GaleriaProductos";
 import Producto from "./vistas/publico/Producto";
 import Planes from "./vistas/publico/Planes";
-import Servicio from "./vistas/publico/Servicios";
-import Contacto from "./vistas/publico/Contacto";
+import Servicios from "./vistas/publico/Servicios";
 
 // Client private routes
 import ResumenOrden from "./vistas/client/ResumenOrden";
@@ -29,30 +28,30 @@ import AdminShop from "./vistas/admin/AdminShop";
 import AdminVentas from "./vistas/admin/AdminVentas";
 import AdminProductosForm from "./vistas/admin/AdminProductosForm";
 import AdminProductos from "./vistas/admin/AdminProductos";
+import Contacto from "./vistas/publico/Contacto";
 
 function App() {
   return (
-    <AppProviders>
+    <UserProvider>
       <BrowserRouter>
         <Navbar />
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<Home />} />
-          <Route path="/plantilla" element={<Plantilla />} />
+          <Route path="/Plantilla" element={<Plantilla />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/productos" element={<Productos />} />
-          <Route path="/productos/:id" element={<Producto />} /> {/* con param */}
+          <Route path="/galeria" element={<Galeria />} />
+          <Route path="/producto" element={<Producto />} />
           <Route path="/planes" element={<Planes />} />
           <Route path="/servicios" element={<Servicios />} />
-          <Route path="/servicios/:id" element={<Servicio />} />
           <Route path="/contacto" element={<Contacto />} />
 
           {/* Client private routes */}
           <Route
             path="/resumen-orden"
             element={
-              <PrivateRoute roles={["admin", "cliente"]}>
+              <PrivateRoute roles={["admin", "client"]}>
                 <ResumenOrden />
               </PrivateRoute>
             }
@@ -60,7 +59,7 @@ function App() {
           <Route
             path="/resena-form"
             element={
-              <PrivateRoute roles={["admin", "cliente"]}>
+              <PrivateRoute roles={["admin", "client"]}>
                 <ResenaForm />
               </PrivateRoute>
             }
@@ -68,15 +67,15 @@ function App() {
           <Route
             path="/profile-user"
             element={
-              <PrivateRoute roles={["admin", "cliente"]}>
+              <PrivateRoute roles={["admin", "client"]}>
                 <ProfileUser />
               </PrivateRoute>
             }
           />
           <Route
-            path="/pedidos/:id"
+            path="/pedido"
             element={
-              <PrivateRoute roles={["admin", "cliente"]}>
+              <PrivateRoute roles={["admin", "client"]}>
                 <Pedido />
               </PrivateRoute>
             }
@@ -84,7 +83,7 @@ function App() {
           <Route
             path="/favorite"
             element={
-              <PrivateRoute roles={["admin", "cliente"]}>
+              <PrivateRoute roles={["admin", "client"]}>
                 <Favorite />
               </PrivateRoute>
             }
@@ -92,7 +91,7 @@ function App() {
           <Route
             path="/carrito-preorden"
             element={
-              <PrivateRoute roles={["admin", "cliente"]}>
+              <PrivateRoute roles={["admin", "client"]}>
                 <CarritoPreOrden />
               </PrivateRoute>
             }
@@ -133,7 +132,7 @@ function App() {
           />
         </Routes>
       </BrowserRouter>
-    </AppProviders>
+    </UserProvider>
   );
 }
 

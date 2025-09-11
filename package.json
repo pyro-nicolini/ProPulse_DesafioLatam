@@ -1,5 +1,5 @@
 {
-  "name": "propulse-marketplace",
+  "name": "package.json",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,9 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "mock:server": "json-server --watch db.json --routes routes.json --port 3000 --cors",
-    "dev:mock": "concurrently -k -n MOCK,WEB -c magenta,cyan \"npm:mock:server\" \"vite\""
+    "preview": "vite preview"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.13",
@@ -25,12 +23,10 @@
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react-swc": "^4.0.0",
-    "concurrently": "^9.0.1",
     "eslint": "^9.33.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
-    "json-server": "^0.17.4",
     "vite": "^7.1.2"
   }
 }

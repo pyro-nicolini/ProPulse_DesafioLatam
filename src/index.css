@@ -526,34 +526,12 @@ nav > i {
 .card-bg-img {
   position: relative;
   overflow: hidden;
-  border: 5px solid rgba(255, 166, 0, 0.2);
+  border: 1px solid rgba(220, 38, 38, 0.2);
   border-radius: 15px;
   padding: 2rem;
-  background-size: 100%;
+  background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
-  cursor: pointer;
-  transition: all .3s ease-in-out;
 }
-
-/* Parallax Animation */
-@keyframes parallax-move {
-  0% {
-    background-size: 100%;
-  }
-  100% {
-    background-size: 110%;
-  }
-}
-
-.card-bg-img.parallax {
-  animation: parallax-move 1s linear infinite alternate;
-}
-
-.card-bg-img.parallax:hover {
-  animation-play-state: paused;
-}
-
 .card-bg-img::after {
   content: "";
   position: absolute;
@@ -606,23 +584,19 @@ nav > i {
 }
 .card:hover,
 .card-white:hover {
-  transform: translateY(-5px);
+  transform: translateY(-10px);
   border-color: rgba(220, 38, 38, 0.5);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
 }
 
 /* Container */
 .container {
-  max-width: 95%;
-  padding: 1rem;
-  margin: 0 auto;
-}
-.container-1200 {
   width: 90%;
   max-width: 1200px;
   margin: 1rem auto;
 }
 .container-cards {
+  max-width: 1200px;
   margin: 1rem 0;
 }
 
@@ -852,10 +826,6 @@ nav > i {
 }
 .gap-4 {
   gap: 4rem;
-}
-
-.sin-gap {
-  gap: 0 !important;
 }
 
 /* =====================

@@ -1,13 +1,11 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useUser } from "../context/UserContext";
 import logo from "../assets/img/logos/logo_color_w.png";
 
-import { useAuth } from "../contexts/AuthContext";
-
 const Navbar = () => {
+  const { user } = useUser();
   const [open, setOpen] = useState(false);
-
-  const { user } = useAuth();
 
   return (
     <nav className="navbar">
@@ -43,7 +41,7 @@ const Navbar = () => {
           <Link className="nav-link plantilla" to="/plantilla">
             Plantilla
           </Link>
-          <Link className="nav-link" to="/productos">
+          <Link className="nav-link" to="/galeria">
             Productos
           </Link>
           <Link className="nav-link" to="/servicios">
@@ -79,7 +77,7 @@ const Navbar = () => {
               </Link>
             </>
           )}
-          <Link to="/productos" onClick={() => setOpen(false)}>
+          <Link to="/galeria" onClick={() => setOpen(false)}>
             Productos
           </Link>
           <Link to="/servicios" onClick={() => setOpen(false)}>
