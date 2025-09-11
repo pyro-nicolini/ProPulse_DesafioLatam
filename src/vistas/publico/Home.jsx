@@ -1,4 +1,5 @@
 import { useFadeUp } from "../../hooks/useFadeUp";
+import Hero from "../../componentes/Hero";
 
 function Home() {
   // Hook que activa la animación fade-up cuando los elementos entran al viewport
@@ -7,6 +8,7 @@ function Home() {
   return (
     <div className="container glass p-1 fade-up">
       <h1>Home</h1>
+      <Hero />
       <div className="card fade-up">
         <h2 className="text-gradient">Bienvenido a la plantilla</h2>
         <h3 className="text-gradient">Bienvenido a la plantilla</h3>
