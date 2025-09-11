@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import logo from "../assets/img/logos/logo_color_w.png";
+import CartWidget from "../componentes/CartWidget";
 
 import { useAuth } from "../contexts/AuthContext";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-
-  const { user } = useAuth();
+  const { user, doLogout } = useAuth();
 
   return (
     <nav className="navbar">
@@ -24,9 +24,19 @@ const Navbar = () => {
 
         <div className="nav-links">
           {user ? (
-            <Link className="nav-link" to="/profile-user">
-              Perfil
-            </Link>
+            <>
+              <span className="nav-link">Hola, {user.nombre}</span>
+              <Link className="nav-link" to="/profile-user">
+                Perfil
+              </Link>
+              <button
+                onClick={doLogout}
+                className="nav-link btn-logout"
+                style={{ background: "none", border: "none", cursor: "pointer" }}
+              >
+                Salir
+              </button>
+            </>
           ) : (
             <>
               <Link className="nav-link" to="/login">
@@ -66,9 +76,21 @@ const Navbar = () => {
             Home
           </Link>
           {user ? (
-            <Link to="/profile-user" onClick={() => setOpen(false)}>
-              Perfil
-            </Link>
+            <>
+              <span className="nav-link">Hola, {user.nombre}</span>
+              <Link to="/profile-user" onClick={() => setOpen(false)}>
+                Perfil
+              </Link>
+              <button
+                onClick={() => {
+                  doLogout();
+                  setOpen(false);
+                }}
+                style={{ background: "none", border: "none", cursor: "pointer" }}
+              >
+                Salir
+              </button>
+            </>
           ) : (
             <>
               <Link to="/login" onClick={() => setOpen(false)}>
@@ -88,10 +110,7 @@ const Navbar = () => {
           <Link to="/contacto" onClick={() => setOpen(false)}>
             Contacto
           </Link>
-          <Link to="/cart" onClick={() => setOpen(false)}>
-            <i className="fas fa-shopping-cart"></i>
-            Carrito
-          </Link>
+          <CartWidget />
         </div>
       )}
     </nav>

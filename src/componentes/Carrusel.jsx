@@ -11,7 +11,7 @@ export default function Carrusel({ items = [], title, routeBase, col = 3 }) {
             style={{ backgroundImage: `url(${item.imagen_url})` }}
             className="card-bg-img parallax"
           >
-            <Link to={`${routeBase}/${item.id}`}>
+            <Link to={`${routeBase}/${item.id_producto ?? item.id}`}>
               <h3>{item.titulo}</h3>
               <div className="container z-10 flex-col justify-end">
                 <p>Estas son las " img4 " mantienen relación cuadrada con CONTAIN</p>

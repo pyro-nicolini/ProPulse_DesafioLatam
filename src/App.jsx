@@ -1,7 +1,7 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppProviders from "./AppProviders";
-import { PrivateRoute } from "./routes/PrivateRoute";
+import PrivateRoute from "./routes/PrivateRoute";
 import Navbar from "./componentes/Navbar";
 
 // Public routes
@@ -42,10 +42,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/productos" element={<Productos />} />
-          <Route path="/productos/:id" element={<Producto />} /> {/* con param */}
+          <Route path="/producto/:id" element={<Producto />} />
           <Route path="/planes" element={<Planes />} />
           <Route path="/servicios" element={<Servicios />} />
-          <Route path="/servicios/:id" element={<Servicio />} />
+          <Route path="/servicio/:id" element={<Servicio />} />
           <Route path="/contacto" element={<Contacto />} />
 
           {/* Client private routes */}

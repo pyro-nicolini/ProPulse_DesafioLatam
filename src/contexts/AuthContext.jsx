@@ -1,50 +1,83 @@
 // src/contexts/AuthContext.jsx
-import { createContext, useContext, useEffect, useState } from "react";
-import { login as apiLogin, me as apiMe, logout as apiLogout } from "../api/proPulseApi";
+import { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext(null);
 export const useAuth = () => useContext(AuthContext);
 
-export function AuthProvider({ children }) {
+// Usuario fallback (si no hay ninguno registrado)
+const HARDCODED_USER = {
+  id: 3,
+  nombre: "Maria Lopez",
+  email: "maria@mail.com",
+  password: "maria@mail.com",
+  rol: "cliente",
+  fecha_creacion: "2025-09-10T00:00:00Z",
+};
+
+export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [booting, setBooting] = useState(true);
 
-  // Carga usuario si hay token
-  const refreshMe = async () => {
-    try {
-      const { data } = await apiMe();
-      setUser(data ?? null);
-    } catch {
-      setUser(null);
-    } finally {
-      setBooting(false);
-    }
-  };
-
+  // Al montar: carga el último logeado si quieres (opcional)
   useEffect(() => {
-    refreshMe();
+    const stored = sessionStorage.getItem("loggedUser");
+    if (stored) setUser(JSON.parse(stored));
   }, []);
 
-  // === Acciones ===
-  const doLogin = async (credentials) => {
-    const { data } = await apiLogin(credentials); // { token, user }
-    if (data?.token) {
-      window.sessionStorage.setItem("token", data.token);
-      setUser(data.user);
+  // LOGIN
+  const doLogin = async ({ email, password }) => {
+    // buscamos primero en localStorage
+    const stored = localStorage.getItem("registeredUser");
+    const registered = stored ? JSON.parse(stored) : null;
+
+    if (
+      registered &&
+      registered.email === email &&
+      registered.password === password
+    ) {
+      setUser(registered);
+      sessionStorage.setItem("loggedUser", JSON.stringify(registered));
+      return { ok: true };
     }
-    return data;
+
+    // fallback hardcodeado
+    if (email === HARDCODED_USER.email && password === HARDCODED_USER.password) {
+      setUser(HARDCODED_USER);
+      sessionStorage.setItem("loggedUser", JSON.stringify(HARDCODED_USER));
+      return { ok: true };
+    }
+
+    throw new Error("Credenciales inválidas");
   };
 
+  // REGISTER
+  const doRegister = async ({ nombre, email, password }) => {
+    const newUser = {
+      id: Date.now(),
+      nombre,
+      email,
+      password,
+      rol: "cliente",
+      fecha_creacion: new Date().toISOString(),
+    };
+
+    // guardamos al usuario registrado en localStorage (permanece aunque cierres sesión)
+    localStorage.setItem("registeredUser", JSON.stringify(newUser));
+
+    // además lo seteamos como logeado ahora mismo
+    setUser(newUser);
+    sessionStorage.setItem("loggedUser", JSON.stringify(newUser));
+
+    return { ok: true };
+  };
+
+  // LOGOUT
   const doLogout = async () => {
-    try {
-      await apiLogout();
-    } catch {}
-    window.sessionStorage.removeItem("token");
     setUser(null);
+    sessionStorage.removeItem("loggedUser"); // 👈 sólo borro la sesión, NO el registrado
   };
 
   return (
-    <AuthContext.Provider value={{ user, booting, doLogin, doLogout, refreshMe }}>
+    <AuthContext.Provider value={{ user, doLogin, doRegister, doLogout }}>
       {children}
     </AuthContext.Provider>
   );

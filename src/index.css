@@ -881,6 +881,9 @@ nav > i {
 .grid-cols-5 {
   grid-template-columns: repeat(1, 1fr);
 }
+.grid-cols-6 {
+  grid-template-columns: repeat(1, 1fr);
+}
 
 /* Tablet */
 @media (min-width: 768px) {
@@ -896,6 +899,9 @@ nav > i {
   .grid-cols-5 {
     grid-template-columns: repeat(3, 1fr);
   }
+  .grid-cols-6 {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 /* Laptop */
@@ -909,6 +915,9 @@ nav > i {
   .grid-cols-5 {
     grid-template-columns: repeat(4, 1fr);
   }
+  .grid-cols-6 {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 /* Desktop grande */
@@ -918,6 +927,9 @@ nav > i {
   }
   .grid-cols-5 {
     grid-template-columns: repeat(5, 1fr);
+  }
+  .grid-cols-6 {
+    grid-template-columns: repeat(6, 1fr);
   }
 }
 
@@ -929,6 +941,9 @@ nav > i {
   .grid-cols-3,
   .grid-cols-4,
   .grid-cols-5 {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .grid-cols-6 {
     grid-template-columns: repeat(1, 1fr);
   }
   .flex-col-responsive {
@@ -950,6 +965,9 @@ nav > i {
   .grid-cols-5 {
     grid-template-columns: repeat(3, 1fr);
   }
+  .grid-cols-6 {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 @media (min-width: 1025px) and (max-width: 1280px) {
@@ -957,6 +975,9 @@ nav > i {
     grid-template-columns: repeat(3, 1fr);
   }
   .grid-cols-5 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .grid-cols-6 {
     grid-template-columns: repeat(4, 1fr);
   }
 }

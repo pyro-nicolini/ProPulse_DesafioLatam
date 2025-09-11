@@ -1,68 +1,94 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import {
-  createCart, getMyCart, addCartItem, updateCartItem, deleteCartItem, deleteCart
-} from "../api/proPulseApi";
+import { createContext, useContext, useEffect, useMemo, useState, useCallback } from "react";
 import { useAuth } from "./AuthContext";
+import {
+  createCart,
+  getMyCart,
+  addCartItem,
+  updateCartItem,
+  deleteCartItem,
+  deleteCart,
+} from "../api/proPulseApi";
 
-const CartCtx = createContext(null);
-export const useCart = () => useContext(CartCtx);
+const CartContext = createContext(null);
+export const useCart = () => useContext(CartContext);
 
-export function CartProvider({ children }) {
+export default function CartProvider({ children }) {
   const { user } = useAuth();
-  const [cart, setCart] = useState(null);
+  const [cart, setCart] = useState(null);       // { id_carrito, id_usuario, estado, items: [...] }
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const refresh = async () => {
-    if (!user) { setCart(null); return null; }
-    setLoading(true);
-    const { data } = await getMyCart(); // backend debe devolver carrito activo del usuario
-    setCart(data ?? null);
-    setLoading(false);
-    return data;
-  };
+  const unpack = (resp) => resp?.data ?? resp;
 
-  const ensureCart = async () => {
-    if (cart?.id_carrito && cart?.estado === "activo") return cart;
-    const { data } = await createCart({});
-    setCart(data);
-    return data;
-  };
+  const refresh = useCallback(async () => {
+    if (!user) { setCart(null); return; }
+    try {
+      setLoading(true); setError(null);
+      const data = unpack(await getMyCart());   // GET /carritos/me
+      setCart(data ?? null);
+    } catch (e) {
+      setCart(null); // si aún no tiene carrito, lo dejamos en null
+    } finally { setLoading(false); }
+  }, [user]);
 
-  const addItem = async ({ id_producto, cantidad, precio_unitario }) => {
-    const c = await ensureCart();
-    await addCartItem(c.id_carrito, { id_producto, cantidad, precio_unitario });
-    return refresh();
-  };
+  const ensureCart = useCallback(async () => {
+    if (!user) throw new Error("Debes iniciar sesión para usar el carrito");
+    if (cart?.id_carrito) return cart.id_carrito;
+    const data = unpack(await createCart({ id_usuario: user.id })); // POST /carritos
+    setCart((prev) => prev ?? { ...data, items: [] });
+    return data.id_carrito;
+  }, [cart, user]);
 
-  const updateItemQty = async (id_item, cantidad) => {
-    await updateCartItem(cart.id_carrito, id_item, { cantidad });
-    return refresh();
-  };
-
-  const removeItem = async (id_item) => {
-    await deleteCartItem(cart.id_carrito, id_item);
-    return refresh();
-  };
-
-  const clearCart = async () => {
-    if (!cart?.id_carrito) return;
-    await deleteCart(cart.id_carrito);
-    setCart(null);
-  };
-
-  useEffect(() => { refresh(); /* eslint-disable-next-line */ }, [user?.id_usuario]);
-
-  const items = cart?.items ?? cart?.carrito_detalle ?? [];
-  const total = useMemo(() =>
-    items.reduce((acc, it) => acc + (it.subtotal ?? (it.cantidad * it.precio_unitario)), 0)
-  , [items]);
-
-  return (
-    <CartCtx.Provider value={{
-      cart, items, loading, total,
-      refresh, addItem, updateItemQty, removeItem, clearCart
-    }}>
-      {children}
-    </CartCtx.Provider>
+  const addItem = useCallback(
+    async ({ id_producto, cantidad = 1, precio_unitario }) => {
+      const id_carrito = await ensureCart();
+      await addCartItem(id_carrito, { id_producto, cantidad, precio_unitario }); // POST /carritos/{id}/items
+      await refresh();
+    },
+    [ensureCart, refresh]
   );
+
+  const setQty = useCallback(
+    async (id_item, cantidad) => {
+      if (!cart?.id_carrito) return;
+      await updateCartItem(cart.id_carrito, id_item, { cantidad }); // PUT /carritos/{id}/items/{id_item}
+      await refresh();
+    },
+    [cart, refresh]
+  );
+
+  const removeItem = useCallback(
+    async (id_item) => {
+      if (!cart?.id_carrito) return;
+      await deleteCartItem(cart.id_carrito, id_item); // DELETE /carritos/{id}/items/{id_item}
+      await refresh();
+    },
+    [cart, refresh]
+  );
+
+  const clear = useCallback(
+    async () => {
+      if (!cart?.id_carrito) return;
+      await deleteCart(cart.id_carrito); // DELETE /carritos/{id}
+      setCart(null);
+    },
+    [cart]
+  );
+
+  const items = cart?.items ?? [];
+  const count = useMemo(() => items.reduce((n, it) => n + Number(it.cantidad ?? 0), 0), [items]);
+  const total = useMemo(
+    () => items.reduce((t, it) => t + Number(it.subtotal ?? (it.precio_unitario ?? 0) * (it.cantidad ?? 1)), 0),
+    [items]
+  );
+
+  useEffect(() => { refresh(); }, [refresh]);
+
+  const value = {
+    cart, items, count, total,
+    loading, error,
+    refresh, addItem, setQty, removeItem, clear,
+  };
+
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

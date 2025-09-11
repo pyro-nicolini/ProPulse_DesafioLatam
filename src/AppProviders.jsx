@@ -1,6 +1,6 @@
-import  {AuthProvider} from "./contexts/AuthContext";
+import  AuthProvider from "./contexts/AuthContext";
 import { CatalogProvider } from "./contexts/CatalogContext";
-import { CartProvider } from "./contexts/CartContext";
+import  CartProvider  from "./contexts/CartContext";
 import { OrderProvider } from "./contexts/OrderContext";
 import { ReviewProvider } from "./contexts/ReviewContext";
 import { FavoritesProvider } from "./contexts/FavoritesContext";

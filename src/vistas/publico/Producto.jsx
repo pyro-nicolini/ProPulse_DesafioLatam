@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getProduct } from "../../api/proPulseApi";
 import { useFadeUp } from "../../hooks/useFadeUp";
+import AddToCartButton from "../../componentes/AddToCartButton";
 
 export default function Producto() {
   const { id } = useParams(); // /productos/:id
@@ -42,7 +43,7 @@ export default function Producto() {
       />
       <p>{producto?.descripcion}</p>
       <div className="flex gap-1">
-        <button className="btn btn-primary">Click Me</button>
+        <AddToCartButton producto={producto} />
         <button className="btn btn-secondary">Click Me</button>
       </div>
     </div>
