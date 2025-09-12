@@ -920,7 +920,7 @@
       "fecha_pedido": "2024-10-01T10:06:00Z"
     }
   ],
-  "/pedidos": "/pedidos",
+
   "pedidos_detalle": [
     {
       "id_pedido_detalle": 1,
