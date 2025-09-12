@@ -5,7 +5,7 @@ import { useFadeUp } from "../../hooks/useFadeUp";
 import AddToCartButton from "../../componentes/AddToCartButton";
 
 export default function Producto() {
-  const { id } = useParams(); // /productos/:id
+  const { id } = useParams();
   const [producto, setProducto] = useState(null);
 
   const [error, setError] = useState(null);
@@ -34,19 +34,20 @@ export default function Producto() {
 
   return (
     <div className="container flex-col items-center justify-center">
-    <div className="card fade-up visible">
-      <h3>{producto?.titulo}</h3>
-      <img
-        className="img2 w-full"
-        src={producto?.imagen_url}
-        alt={producto?.titulo}
-      />
-      <p>{producto?.descripcion}</p>
-      <div className="flex gap-1">
-        <AddToCartButton producto={producto} />
-        <button className="btn btn-secondary">Click Me</button>
+      <div className="card fade-up visible">
+        <h3>{producto?.titulo}</h3>
+        <h2>{producto?.stock}</h2>
+        <h2>{producto?.precio}</h2>
+        <img
+          className="img2 w-full"
+          src={producto?.imagen_url}
+          alt={producto?.titulo}
+        />
+        <p>{producto?.descripcion}</p>
+        <div className="flex gap-1">
+          <AddToCartButton product={producto} />
+        </div>
       </div>
     </div>
-        </div>
   );
 }

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Contrato API – ProPulse (Front vs Back)</title>
+<style>
+  :root{
+    --bg:#0f172a;        /* slate-900 */
+    --panel:#111827;     /* gray-900 */
+    --panel-2:#0b1220;   /* custom */
+    --muted:#94a3b8;     /* slate-400 */
+    --text:#e5e7eb;      /* gray-200 */
+    --accent:#22d3ee;    /* cyan-400 */
+    --ok:#22c55e;        /* green-500 */
+    --warn:#f59e0b;      /* amber-500 */
+    --bad:#ef4444;       /* red-500 */
+    --table-stripe:#0b1324;
+    --code-bg:#0b1020;
+    --chip:#1f2937;      /* gray-800 */
+    --divider:#1f2937;
+  }
+  html,body{margin:0;height:100%;}
+  body{
+    background: radial-gradient(1200px 800px at 100% -10%, #0b1220 0%, #0a0f1a 35%, #080c16 60%, #070a13 100%);
+    color:var(--text);
+    font: 15px/1.55 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    padding:32px 20px 64px;
+  }
+  .container{max-width:1100px;margin:0 auto;}
+  h1,h2,h3{line-height:1.25;margin:0 0 10px;}
+  h1{
+    font-size:clamp(22px,3.4vw,34px);
+    letter-spacing:.2px;
+  }
+  h2{
+    font-size:clamp(18px,2.6vw,24px);
+    margin-top:28px;
+    border-left:4px solid var(--accent);
+    padding-left:10px;
+  }
+  h3{font-size:clamp(16px,2.2vw,20px); margin-top:22px;color:#cbd5e1;}
+  p{margin:8px 0;color:#dbeafe;}
+  .muted{color:var(--muted)}
+  .panel{
+    background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+    border:1px solid #0b1b2e;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.03);
+    border-radius:14px;
+    padding:18px 18px 8px;
+    margin:16px 0 22px;
+  }
+  .grid{
+    display:grid; gap:16px;
+    grid-template-columns: repeat(12, minmax(0,1fr));
+  }
+  .col-12{grid-column: span 12;}
+  .col-6{grid-column: span 6;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  .chip{
+    background:var(--chip);
+    color:#cbd5e1;
+    border:1px solid #172234;
+    padding:6px 10px;
+    border-radius:999px;
+    font-size:12px;
+    letter-spacing:.2px;
+    white-space:nowrap;
+  }
+  .kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#0b1324;border:1px solid #1b2b45;border-radius:6px;padding:2px 6px;color:#e2e8f0;font-size:12px}
+
+  hr.sep{
+    border:0;border-top:1px dashed var(--divider);
+    margin:22px 0;
+  }
+  /* Tables */
+  .table-wrap{overflow:auto;border-radius:12px;border:1px solid #142038}
+  table{min-width:720px;border-collapse:separate;border-spacing:0;width:100%;}
+  thead th{
+    position:sticky; top:0; z-index:1;
+    background:#0b1324; color:#cfe5ff;
+    font-weight:600; text-align:left;
+    letter-spacing:.2px; font-size:13px;
+    border-bottom:1px solid #1b2b45;
+  }
+  th, td{padding:12px 14px; vertical-align:top;}
+  tbody tr:nth-child(odd){background:var(--table-stripe)}
+  tbody tr:nth-child(even){background:#0a1222}
+  td code, th code{background:#0e1726;border:1px solid #1b2b45;padding:2px 6px;border-radius:6px}
+
+  /* Status badges */
+  .badge{font-weight:700; padding:3px 8px; border-radius:8px; font-size:12px; border:1px solid transparent}
+  .b-ok{background:rgba(34,197,94,.12); color:#86efac; border-color:rgba(34,197,94,.3)}
+  .b-warn{background:rgba(245,158,11,.12); color:#fbbf24; border-color:rgba(245,158,11,.3)}
+  .b-bad{background:rgba(239,68,68,.12); color:#fca5a5; border-color:rgba(239,68,68,.28)}
+  .b-info{background:rgba(34,211,238,.12); color:#67e8f9; border-color:rgba(34,211,238,.28)}
+
+  /* Code blocks */
+  pre{
+    background:var(--code-bg);
+    color:#e2e8f0;
+    border:1px solid #13223a;
+    border-radius:12px;
+    padding:14px 16px;
+    overflow:auto;
+    margin:10px 0 18px;
+  }
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:13px;}
+  /* Small helpers */
+  .lead{font-size:14.5px;color:#d9e3f8}
+  .callout{display:flex; gap:10px; align-items:flex-start; background:#0b1324; border:1px solid #193259; padding:12px 14px; border-radius:12px}
+  .callout strong{color:#e2e8f0}
+  .tag{font-size:11px;color:#8ab4ff}
+</style>
+</head>
+<body>
+  <div class="container">
+    <header class="panel">
+      <h1>Contrato API – ProPulse · Front vs Back</h1>
+      <p class="lead">Documento visual para el equipo: responsabilidades, endpoints y ejemplos de request/response. Mantiene <strong>todos</strong> los datos tal cual los aportaste.</p>
+      <div class="chips">
+        <span class="chip">Inline CSS</span>
+        <span class="chip">JSON de ejemplo</span>
+        <span class="chip">Tablas comparativas</span>
+        <span class="chip">Guía rápida</span>
+      </div>
+    </header>
+
+    <!-- Errores comunes -->
+    <section class="panel">
+      <h2>⚠️ Errores comunes</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th style="width:120px">Código</th><th>Caso</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="badge b-bad">400</span></td><td>Body inválido o faltan required</td></tr>
+            <tr><td><span class="badge b-bad">401</span></td><td>Sin token o token inválido</td></tr>
+            <tr><td><span class="badge b-bad">403</span></td><td>Usuario sin permisos</td></tr>
+            <tr><td><span class="badge b-bad">404</span></td><td>Recurso no encontrado</td></tr>
+            <tr><td><span class="badge b-warn">409</span></td><td>Conflicto (ej. reseña duplicada)</td></tr>
+            <tr><td><span class="badge b-warn">422</span></td><td>Semántica inválida (ej. cantidad ≤ 0)</td></tr>
+            <tr><td><span class="badge b-bad">500</span></td><td>Error interno</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid" style="margin-top:14px">
+        <div class="col-12 callout">
+          <div>✅</div>
+          <div><strong>Frontend</strong> solo manda los campos “de negocio” (ej. <code>titulo</code>, <code>precio</code>, <code>cantidad</code>, etc.).</div>
+        </div>
+        <div class="col-12 callout">
+          <div>✅</div>
+          <div><strong>Backend/DB</strong> rellena <code>fecha_creacion</code> automáticamente. (SQL⇒ <code>fecha_creacion TIMESTAMPTZ NOT NULL DEFAULT NOW()</code>)</div>
+        </div>
+        <div class="col-12 callout">
+          <div>✅</div>
+          <div>La <strong>response</strong> al frontend siempre incluye <code>fecha_creacion</code> (porque el backend la devuelve después del insert).</div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="sep"/>
+
+    <!-- Responsabilidades Front vs Back -->
+    <section class="panel">
+      <h2>Responsabilidades Frontend vs Backend</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Área / Dato</th>
+              <th>Lo maneja el Frontend</th>
+              <th>Lo maneja el Backend (DB / API)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Fechas (fecha_creacion)</td>
+              <td>❌ Solo las muestra</td>
+              <td>✅ Las genera automáticamente (DEFAULT NOW())</td>
+            </tr>
+            <tr>
+              <td>Subtotal / Total</td>
+              <td>❌ No calcula valores oficiales</td>
+              <td>✅ Calcula siempre (carrito_detalle, pedidos)</td>
+            </tr>
+            <tr>
+              <td>Precio unitario (precio_unitario)</td>
+              <td>❌ No lo define</td>
+              <td>✅ Lo fija al agregar producto al carrito/pedido</td>
+            </tr>
+            <tr>
+              <td>Stock</td>
+              <td>❌ No valida contra inventario</td>
+              <td>✅ Valida disponibilidad, evita sobreventas</td>
+            </tr>
+            <tr>
+              <td>Reglas de tipo (servicio sin stock)</td>
+              <td>❌ No aplica restricciones</td>
+              <td>✅ DB aplica CHECK (stock = NULL en servicios)</td>
+            </tr>
+            <tr>
+              <td>Estados (carrito, pedido, etc.)</td>
+              <td>❌ No cambia estados por sí solo</td>
+              <td>✅ Back controla transiciones válidas</td>
+            </tr>
+            <tr>
+              <td>Unicidad (like, reseña, item único)</td>
+              <td>❌ No garantiza</td>
+              <td>✅ DB con UNIQUE y back devuelve error si duplica</td>
+            </tr>
+            <tr>
+              <td>Descuentos / IVA / Envío</td>
+              <td>❌ No calcula montos reales</td>
+              <td>✅ Los calcula el backend</td>
+            </tr>
+            <tr>
+              <td>Autenticación</td>
+              <td>✅ Envía token en headers</td>
+              <td>✅ Valida token, resuelve usuario autenticado</td>
+            </tr>
+            <tr>
+              <td>Datos mostrados (listas, stock, etc.)</td>
+              <td>✅ Renderiza UI y actualiza vista</td>
+              <td>❌ No es su responsabilidad</td>
+            </tr>
+            <tr>
+              <td>Acciones de usuario (agregar, quitar)</td>
+              <td>✅ Envía requests a la API</td>
+              <td>❌ Solo responde a lo que manda el front</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Guía rápida -->
+    <section class="panel">
+      <h2>📘 Guía rápida – Responsabilidades Front vs Back</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Paso / Endpoint</th>
+              <th>Front envía (mínimo)</th>
+              <th>Back devuelve</th>
+              <th>Back calcula / valida</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Registro</strong><br><code>POST /auth/register</code></td>
+              <td>nombre, email, password</td>
+              <td>user + token</td>
+              <td>fecha_creacion</td>
+            </tr>
+            <tr>
+              <td><strong>Login</strong><br><code>POST /auth/login</code></td>
+              <td>email, password</td>
+              <td>user + token</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><strong>Me</strong><br><code>GET /auth/me</code></td>
+              <td>— (token en header)</td>
+              <td>user</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><strong>Usuario</strong><br><code>GET /usuarios/{id}</code></td>
+              <td>—</td>
+              <td>user completo</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><strong>Editar usuario</strong><br><code>PUT /usuarios/{id}</code></td>
+              <td>nombre?, avatar_url?</td>
+              <td>user actualizado</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><strong>Listar productos</strong><br><code>GET /productos</code></td>
+              <td>filtros opcionales (q, tipo, paginación)</td>
+              <td>array de productos</td>
+              <td>fecha_creacion (DB)</td>
+            </tr>
+            <tr>
+              <td><strong>Ver producto</strong><br><code>GET /productos/{id}</code></td>
+              <td>—</td>
+              <td>producto</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><strong>Crear producto</strong><br><code>POST /admin/productos</code></td>
+              <td>titulo, descripcion, precio, stock?, tipo, imagen_url, destacado?</td>
+              <td>producto creado</td>
+              <td>fecha_creacion; stock=NULL si servicio</td>
+            </tr>
+            <tr>
+              <td><strong>Actualizar producto</strong><br><code>PUT /admin/productos/{id}</code></td>
+              <td>campos editables</td>
+              <td>producto actualizado</td>
+              <td>valida tipo/stock</td>
+            </tr>
+            <tr>
+              <td><strong>Destacar producto</strong><br><code>PUT /admin/productos/{id}/destacado</code></td>
+              <td>{destacado}</td>
+              <td>producto actualizado</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><strong>Crear carrito</strong><br><code>POST /carritos</code></td>
+              <td>id_usuario (o token)</td>
+              <td>carrito</td>
+              <td>fecha_creacion; estado inicial</td>
+            </tr>
+            <tr>
+              <td><strong>Mi carrito</strong><br><code>GET /carritos/me</code></td>
+              <td>—</td>
+              <td>carrito + items</td>
+              <td>subtotal = cantidad * precio_unitario; totales agregados</td>
+            </tr>
+            <tr>
+              <td><strong>Agregar ítem</strong><br><code>POST /carritos/{id}/items</code></td>
+              <td>{id_producto, cantidad}</td>
+              <td>item detalle</td>
+              <td>precio_unitario (fijado); subtotal generado; validar stock</td>
+            </tr>
+            <tr>
+              <td><strong>Editar ítem</strong><br><code>PUT /carritos/{id}/items/{id_item}</code></td>
+              <td>{cantidad}</td>
+              <td>item actualizado</td>
+              <td>nuevo subtotal; revalidar stock</td>
+            </tr>
+            <tr>
+              <td><strong>Borrar ítem</strong><br><code>DELETE /carritos/{id}/items/{id_item}</code></td>
+              <td>—</td>
+              <td>204</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><strong>Cerrar carrito</strong><br><code>PUT /carritos/{id}</code></td>
+              <td>{estado}?</td>
+              <td>carrito actualizado</td>
+              <td>transiciones válidas</td>
+            </tr>
+            <tr>
+              <td><strong>Crear pedido</strong><br><code>POST /pedidos</code></td>
+              <td>{id_carrito, cupon?}</td>
+              <td>pedido con detalle</td>
+              <td>totales línea y pedido; descuentos; IVA/envío; fecha_pedido</td>
+            </tr>
+            <tr>
+              <td><strong>Ver pedido</strong><br><code>GET /pedidos/{id}</code></td>
+              <td>—</td>
+              <td>pedido completo</td>
+              <td>totales precalculados</td>
+            </tr>
+            <tr>
+              <td><strong>Historial pedidos</strong><br><code>GET /pedidos</code></td>
+              <td>filtros (estado, fecha, paginación)</td>
+              <td>lista de pedidos</td>
+              <td>totales ya calculados</td>
+            </tr>
+            <tr>
+              <td><strong>Admin actualizar pedido</strong><br><code>PUT /admin/pedidos/{id}</code></td>
+              <td>{estado}</td>
+              <td>pedido actualizado</td>
+              <td>valida transición estado</td>
+            </tr>
+            <tr>
+              <td><strong>Listar reseñas</strong><br><code>GET /productos/{id}/resenas</code></td>
+              <td>paginación</td>
+              <td>array de reseñas</td>
+              <td>fecha_creacion; rating promedio (si aplica)</td>
+            </tr>
+            <tr>
+              <td><strong>Crear reseña</strong><br><code>POST /productos/{id}/resenas</code></td>
+              <td>{comentario, calificacion}</td>
+              <td>reseña creada</td>
+              <td>unicidad (1 reseña por user-producto); fecha_creacion</td>
+            </tr>
+            <tr>
+              <td><strong>Dar like</strong><br><code>POST /favoritos</code></td>
+              <td>{id_producto}</td>
+              <td>like creado</td>
+              <td>unicidad (1 like por user-producto); fecha_creacion</td>
+            </tr>
+            <tr>
+              <td><strong>Quitar like</strong><br><code>DELETE /favoritos/{id}</code></td>
+              <td>—</td>
+              <td>204</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><strong>Contar likes</strong><br><code>GET /productos/{id}/likes</code></td>
+              <td>—</td>
+              <td>{count}</td>
+              <td>conteo agregado en DB</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Cheat Sheet Tabla -->
+    <section class="panel">
+      <h2>📝 Cheat Sheet – Front vs Back (Tabla)</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Área</th>
+              <th>Frontend envía</th>
+              <th>Backend devuelve</th>
+              <th>Backend calcula/valida</th>
+              <th>❌ Lo que NO hace el Frontend</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>🔐 Auth</td>
+              <td>nombre, email, password (registro)<br/>email, password (login)</td>
+              <td>user + token</td>
+              <td>genera fecha_creacion</td>
+              <td>no genera fechas ni tokens, solo envía credenciales</td>
+            </tr>
+            <tr>
+              <td>👤 Usuarios</td>
+              <td>cambios de nombre/avatar</td>
+              <td>user actualizado</td>
+              <td>controla unicidad de email, guarda cambios con fecha</td>
+              <td>no valida unicidad de emails, no asigna roles ni fechas</td>
+            </tr>
+            <tr>
+              <td>🛒 Productos</td>
+              <td>título, descripción, precio, stock (si producto), tipo, imagen</td>
+              <td>producto con id, fecha_creacion</td>
+              <td>valida stock=NULL en servicios, genera fecha_creacion</td>
+              <td>no crea IDs, no fuerza fecha_creacion, no valida stock-serv.</td>
+            </tr>
+            <tr>
+              <td>🛍️ Carritos</td>
+              <td>{id_producto, cantidad}</td>
+              <td>item con precio_unitario, subtotal, fecha_creacion</td>
+              <td>fija precio unitario, calcula subtotal, valida stock</td>
+              <td>no calcula subtotal, no congela precios, no valida stock real</td>
+            </tr>
+            <tr>
+              <td>📦 Pedidos</td>
+              <td>{id_carrito, cupon?}</td>
+              <td>pedido con detalle, total, fecha_pedido</td>
+              <td>suma totales, aplica descuentos, IVA/envío, controla estado</td>
+              <td>no calcula totales/IVA, no decide estados, no aplica desc.</td>
+            </tr>
+            <tr>
+              <td>⭐ Reseñas</td>
+              <td>{comentario, calificacion}</td>
+              <td>reseña con fecha_creacion</td>
+              <td>asegura 1 reseña por usuario-producto</td>
+              <td>no garantiza unicidad de reseñas, no crea fecha_creacion</td>
+            </tr>
+            <tr>
+              <td>❤️ Likes</td>
+              <td>{id_producto}</td>
+              <td>like con id_like, fecha_creacion</td>
+              <td>asegura 1 like por usuario-producto, devuelve conteo total</td>
+              <td>no cuenta likes, no garantiza unicidad, no asigna fechas</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout" style="margin-top:14px">
+        <div>🚫</div>
+        <div><strong>Regla de oro:</strong><br/>
+          El Frontend nunca envía ni calcula → <code>fecha_creacion</code>, <code>subtotal</code>, <code>total</code>, <code>precio_unitario</code>, ni estados forzados.<br/>
+          El Backend siempre valida y calcula → stock, precios, subtotales/totales, fechas, descuentos, IVA, unicidad y transiciones.
+        </div>
+      </div>
+    </section>
+
+    <!-- Contrato API -->
+<section class="panel">
+  <h2>📜 Rutas de Endpoints (IDs normalizados a DB)</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Método</th>
+          <th>Ruta</th>
+          <th>Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- AUTH -->
+        <tr><td>POST</td><td><code>/auth/register</code></td><td>Crear usuario + token</td></tr>
+        <tr><td>POST</td><td><code>/auth/login</code></td><td>Login + token</td></tr>
+        <tr><td>GET</td><td><code>/auth/me</code></td><td>Usuario autenticado</td></tr>
+        <tr><td>POST</td><td><code>/auth/logout</code></td><td>Cerrar sesión</td></tr>
+
+        <!-- USUARIOS -->
+        <tr><td>GET</td><td><code>/usuarios/{id_usuario}</code></td><td>Ver usuario</td></tr>
+        <tr><td>PUT</td><td><code>/usuarios/{id_usuario}</code></td><td>Actualizar usuario</td></tr>
+        <tr><td>DELETE</td><td><code>/usuarios/{id_usuario}</code></td><td>Borrar usuario</td></tr>
+
+        <!-- PRODUCTOS (Público) -->
+        <tr><td>GET</td><td><code>/productos</code></td><td>Listar productos (filtros opc.)</td></tr>
+        <tr><td>GET</td><td><code>/productos/{id_producto}</code></td><td>Ver producto</td></tr>
+
+        <!-- PRODUCTOS (Admin) -->
+        <tr><td>POST</td><td><code>/admin/productos</code></td><td>Crear producto</td></tr>
+        <tr><td>PUT</td><td><code>/admin/productos/{id_producto}</code></td><td>Actualizar producto</td></tr>
+        <tr><td>DELETE</td><td><code>/admin/productos/{id_producto}</code></td><td>Borrar producto</td></tr>
+        <tr><td>PUT</td><td><code>/admin/productos/{id_producto}/destacado</code></td><td>Marcar/editar destacado</td></tr>
+
+        <!-- CARRITOS -->
+        <tr><td>POST</td><td><code>/carritos</code></td><td>Crear carrito</td></tr>
+        <tr><td>GET</td><td><code>/carritos/me</code></td><td>Mi carrito</td></tr>
+        <tr><td>PUT</td><td><code>/carritos/{id_carrito}</code></td><td>Actualizar carrito (estado, etc.)</td></tr>
+        <tr><td>DELETE</td><td><code>/carritos/{id_carrito}</code></td><td>Borrar carrito</td></tr>
+
+        <!-- ÍTEMS DE CARRITO -->
+        <tr><td>POST</td><td><code>/carritos/{id_carrito}/items</code></td><td>Agregar ítem</td></tr>
+        <tr><td>PUT</td><td><code>/carritos/{id_carrito}/items/{id_detalle}</code></td><td>Editar ítem (front: <code>id_item</code>)</td></tr>
+        <tr><td>DELETE</td><td><code>/carritos/{id_carrito}/items/{id_detalle}</code></td><td>Eliminar ítem (front: <code>id_item</code>)</td></tr>
+
+        <!-- PEDIDOS -->
+        <tr><td>POST</td><td><code>/pedidos</code></td><td>Crear pedido</td></tr>
+        <tr><td>GET</td><td><code>/pedidos</code></td><td>Historial de pedidos</td></tr>
+        <tr><td>GET</td><td><code>/pedidos/{id_pedido}</code></td><td>Ver pedido</td></tr>
+        <tr><td>PUT</td><td><code>/admin/pedidos/{id_pedido}</code></td><td>Actualizar estado (admin)</td></tr>
+
+        <!-- RESEÑAS -->
+        <tr><td>GET</td><td><code>/productos/{id_producto}/resenas</code></td><td>Listar reseñas</td></tr>
+        <tr><td>POST</td><td><code>/productos/{id_producto}/resenas</code></td><td>Crear reseña</td></tr>
+
+        <!-- LIKES / FAVORITOS -->
+        <tr><td>POST</td><td><code>/favoritos</code></td><td>Dar like (favorito)</td></tr>
+        <tr><td>GET</td><td><code>/favoritos</code></td><td>Listar favoritos (puede usar <code>?_expand=producto</code>)</td></tr>
+        <tr><td>DELETE</td><td><code>/favoritos/{id_like}</code></td><td>Quitar like</td></tr>
+        <tr><td>GET</td><td><code>/productos/{id_producto}/likes</code></td><td>Contar likes</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout" style="margin-top:12px">
+    <div>ℹ️</div>
+    <div>
+      Placeholders alineados a la DB: <code>{id_usuario}</code>, <code>{id_producto}</code>, <code>{id_carrito}</code>, <code>{id_pedido}</code>, <code>{id_resena}</code>, <code>{id_like}</code>, <code>{id_detalle}</code>.<br/>
+      En tu wrapper del front, <strong><code>id_item</code> = <code>id_detalle</code></strong>.
+    </div>
+  </div>
+</section>
+  </div>
+</body>
+</html>

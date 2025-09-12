@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Instructivo – Uso de mock:server (ProPulse)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg:#0f172a;        /* slate-900 */
+      --panel:#111827;     /* gray-900 */
+      --muted:#94a3b8;     /* slate-400 */
+      --text:#e5e7eb;      /* gray-200 */
+      --accent:#22d3ee;    /* cyan-400 */
+      --ok:#22c55e;        /* green-500 */
+      --warn:#f59e0b;      /* amber-500 */
+      --err:#ef4444;       /* red-500 */
+      --code:#0b1020;
+      --border:#1f2937;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;background:linear-gradient(160deg, var(--bg), #0b1226 60%, #08101f);
+      color:var(--text);font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      line-height:1.5;
+    }
+    .wrap{max-width:980px;margin:40px auto;padding:0 16px}
+    header{
+      display:flex;gap:16px;align-items:center;margin-bottom:24px
+    }
+    .logo{
+      width:44px;height:44px;border-radius:12px;
+      background: radial-gradient(120px 100px at 20% 20%, #1dd4ff33 0 40%, transparent 41%),
+                  linear-gradient(145deg, #0a1a2b, #0b0f1a);
+      border:1px solid #1f3347; box-shadow:0 0 0 1px #0b2032 inset, 0 10px 30px #0a1a2b55;
+    }
+    h1{font-size:28px;margin:0}
+    .tag{border:1px solid var(--border);color:var(--muted);padding:2px 8px;border-radius:999px;font-size:12px}
+    .panel{
+      background:linear-gradient(180deg, #0c1424, #0a1222);
+      border:1px solid var(--border);border-radius:16px;padding:18px;margin:16px 0;box-shadow:0 10px 30px #0004
+    }
+    h2{font-size:20px;margin:6px 0 12px}
+    h3{font-size:16px;margin:8px 0}
+    .grid{display:grid;gap:12px}
+    .grid.cols-2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+    code, pre{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+    pre{
+      background:linear-gradient(180deg, var(--code), #091229);
+      border:1px solid var(--border);color:#d1eaff;padding:14px;border-radius:12px;overflow:auto
+    }
+    .kbd{
+      padding:2px 6px;border-radius:6px;border:1px solid var(--border);
+      background:#0a1222;color:#bfe9ff;font-weight:600;font-size:12px
+    }
+    ul{margin:8px 0 0 18px}
+    li{margin:4px 0}
+    .callout{
+      border-left:3px solid var(--accent);padding:10px 12px;background:#0a1727;border-radius:10px;border:1px solid var(--border);color:#c7f9ff
+    }
+    .ok{color:var(--ok)} .warn{color:var(--warn)} .err{color:var(--err)}
+    .muted{color:var(--muted)}
+    .pill{display:inline-block;padding:4px 10px;border-radius:999px;background:#0e1a2f;border:1px solid #1e2b45;color:#b7d7ff;font-size:12px;margin-right:6px}
+    footer{margin:28px 0 60px;text-align:center;color:var(--muted);font-size:13px}
+    .hr{height:1px;background:linear-gradient(90deg,transparent,#1f2b3f,transparent);border:0;margin:18px 0}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>Instructivo – Usar <span class="muted">mock:server</span></h1>
+        <div class="tag">ProPulse · Mock avanzado con <code>server.js</code></div>
+      </div>
+    </header>
+
+    <section class="panel">
+      <h2>🧭 Objetivo</h2>
+      <p>Levantar un backend simulado (mock) que imita las tablas SQL y contratos de la API para desarrollar el Front sin depender del servidor real.</p>
+      <div class="callout">
+        Incluye: auth básica, anidación en respuestas (<code>/carritos/me</code>, <code>/favoritos</code>), validación de stock, cálculo de <code>subtotal</code> y <code>total</code>, cupón <code>FIT10</code>.
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>📁 Requisitos</h2>
+      <div class="grid cols-2">
+        <div>
+          <h3>Archivos esperados</h3>
+          <ul>
+            <li><span class="pill">server.js</span> lógica del mock</li>
+            <li><span class="pill">db.json</span> datos planos (tablas)</li>
+            <li><span class="pill">routes.json</span> rewrites de endpoints</li>
+            <li><span class="pill">.env.local</span> <code>VITE_API_BASE_URL</code></li>
+            <li><span class="pill">package.json</span> scripts <code>mock:server</code>, <code>dev:mock</code></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Variables de entorno</h3>
+          <pre><code># .env.local
+VITE_API_BASE_URL=http://localhost:3000
+</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>🚀 Comandos principales</h2>
+      <div class="grid cols-2">
+        <div>
+          <h3>Instalar dependencias</h3>
+          <pre><code>npm i</code></pre>
+          <p class="muted">Asegúrate de tener <code>json-server</code>, <code>cors</code> y <code>concurrently</code> en <code>package.json</code> si usas la opción avanzada.</p>
+        </div>
+        <div>
+          <h3>Levantar mock + web</h3>
+          <pre><code>npm run dev:mock
+# Inicia:
+# - Mock en http://localhost:3000
+# - Vite  en http://localhost:5173</code></pre>
+        </div>
+      </div>
+      <div class="hr"></div>
+      <h3>Solo el mock (sin Vite)</h3>
+      <pre><code>npm run mock:server
+# Inicia el servidor de mock en http://localhost:3000</code></pre>
+    </section>
+
+    <section class="panel">
+      <h2>🧪 Probar endpoints rápidos</h2>
+      <div class="grid cols-2">
+        <div>
+          <h3>Login (obtén token)</h3>
+          <pre><code>curl -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"cliente@cliente","password":"cualquiera"}'</code></pre>
+          <p class="muted">Usa el token como <code>Authorization: Bearer &lt;token&gt;</code> en las siguientes llamadas.</p>
+        </div>
+        <div>
+          <h3>Mi sesión</h3>
+          <pre><code>curl http://localhost:3000/auth/me \
+  -H "Authorization: Bearer 2"</code></pre>
+        </div>
+      </div>
+      <div class="grid cols-2">
+        <div>
+          <h3>Mi carrito (anidado)</h3>
+          <pre><code>curl http://localhost:3000/carritos/me \
+  -H "Authorization: Bearer 2"</code></pre>
+        </div>
+        <div>
+          <h3>Crear pedido</h3>
+          <pre><code>curl -X POST http://localhost:3000/pedidos \
+  -H "Authorization: Bearer 2" -H "Content-Type: application/json" \
+  -d '{"id_carrito":1,"cupon":"FIT10"}'</code></pre>
+        </div>
+      </div>
+      <div class="grid cols-2">
+        <div>
+          <h3>Likes (anidado)</h3>
+          <pre><code>curl http://localhost:3000/favoritos \
+  -H "Authorization: Bearer 2"</code></pre>
+        </div>
+        <div>
+          <h3>Contar likes</h3>
+          <pre><code>curl http://localhost:3000/productos/1/likes</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>🔌 Integración con el Front (axios)</h2>
+      <p>Tu <code>propulseapi.js</code> ya apunta a <code>VITE_API_BASE_URL</code>. Con el mock en <span class="ok">http://localhost:3000</span>, todas las funciones (login, productos, carrito, pedidos, reseñas, likes) responden con los contratos esperados.</p>
+      <ul>
+        <li>El Front <strong>no</strong> envía: <code>fecha_creacion</code>, <code>subtotal</code>, <code>total</code>.</li>
+        <li>El Back (mock) <strong>calcula</strong>: <code>subtotal</code> en ítems, <code>total</code> de pedido, congela <code>precio_unitario</code>, valida stock y unicidades.</li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2>🛠️ Troubleshooting</h2>
+      <ul>
+        <li><span class="warn">401 NO_AUTH</span> → asegúrate de enviar el header <code>Authorization: Bearer &lt;token&gt;</code>.</li>
+        <li><span class="err">STOCK_INSUFICIENTE</span> → reduce <code>cantidad</code> o elige otro producto.</li>
+        <li><span class="warn">ITEM_DUPLICADO / YA_LIKE / YA_RESEÑADO</span> → la unicidad está activa; evita duplicar.</li>
+        <li>Si cambias <code>db.json</code>, reinicia el mock o usa <span class="kbd">Ctrl</span>+<span class="kbd">C</span> y vuelve a correr <code>npm run mock:server</code>.</li>
+      </ul>
+    </section>
+
+    <footer>
+      ProPulse · Mock avanzado – hecho con ❤️ para acelerar el front.
+    </footer>
+  </div>
+</body>
+</html>

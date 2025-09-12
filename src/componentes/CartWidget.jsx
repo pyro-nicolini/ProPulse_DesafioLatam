@@ -2,10 +2,15 @@ import { Link } from "react-router-dom";
 import { useCart } from "../contexts/CartContext";
 
 export default function CartWidget() {
-  const { count } = useCart();
+  const { items, totals } = useCart();
+  const count = items.reduce((a, i) => a + (i.cantidad || 0), 0);
   return (
-    <Link className="nav-link" to="/cart">
-      🛒 Carrito {count > 0 ? `(${count})` : ""}
+    <>
+    <Link to="/carrito">
+    <button className="btn btn-secondary p-1">
+      🛒 {count} — ${totals.total}
+    </button>
     </Link>
+    </>
   );
 }
