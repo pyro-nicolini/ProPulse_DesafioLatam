@@ -21,8 +21,10 @@ export default function GaleriaServicios() {
   const serviciosBarajados = desordenarArray(servicios).slice(0, 6);
   return (
     <>
-      <Carrusel items={serviciosBarajados} title="Galería de Servicios" routeBase="/servicio" col={4}/>
-      <Destacados title="Servicios Destacados" col={3} routeBase="/servicio" cant={3} tipoProducto="servicio"/>
+    <div className="w-full container-1200 min-h-screen">
+      <Carrusel items={serviciosBarajados} title="Galería de Servicios" routeBase="/servicios" col={3}/>
+      <Destacados title="Servicios Destacados" col={3} routeBase="/servicios" cant={3} tipoProducto="servicio"/>
+    </div>
     </>
   );
 }

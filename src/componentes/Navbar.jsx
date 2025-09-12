@@ -11,8 +11,10 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <div className="navbar-container">
-        <img className="navbar-brand" src={logo} alt="ProPulse" />
+      <div className="navbar container">
+        <Link className="nav-link" to="/profile-user">
+          <img className="navbar-brand" src={logo} alt="ProPulse" />
+        </Link>
 
         <button
           aria-label="Abrir menú"
@@ -21,18 +23,22 @@ const Navbar = () => {
         >
           &#9776;
         </button>
-
+          <Link className="nav-link" to="/cart">
+            <CartWidget />
+          </Link>
         <div className="nav-links">
           {user ? (
             <>
               <span className="nav-link">Hola, {user.nombre}</span>
-              <Link className="nav-link" to="/profile-user">
-                Perfil
-              </Link>
+              {console.log(user)}
               <button
                 onClick={doLogout}
                 className="nav-link btn-logout"
-                style={{ background: "none", border: "none", cursor: "pointer" }}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                }}
               >
                 Salir
               </button>
@@ -62,10 +68,7 @@ const Navbar = () => {
           <Link className="nav-link" to="/contacto">
             Contacto
           </Link>
-          <Link className="nav-link" to="/cart">
-            <i className="fas fa-shopping-cart"></i>
-            Carrito
-          </Link>
+
         </div>
       </div>
 
@@ -77,16 +80,17 @@ const Navbar = () => {
           </Link>
           {user ? (
             <>
-              <span className="nav-link">Hola, {user.nombre}</span>
-              <Link to="/profile-user" onClick={() => setOpen(false)}>
-                Perfil
-              </Link>
+
               <button
                 onClick={() => {
                   doLogout();
                   setOpen(false);
                 }}
-                style={{ background: "none", border: "none", cursor: "pointer" }}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                }}
               >
                 Salir
               </button>
@@ -110,7 +114,13 @@ const Navbar = () => {
           <Link to="/contacto" onClick={() => setOpen(false)}>
             Contacto
           </Link>
-          <CartWidget />
+          <button
+            onClick={doLogout}
+            className="nav-link btn-logout"
+            style={{ background: "none", border: "none", cursor: "pointer" }}
+          >
+            Salir
+          </button>
         </div>
       )}
     </nav>

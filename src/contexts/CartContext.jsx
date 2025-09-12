@@ -1,94 +1,206 @@
-import { createContext, useContext, useEffect, useMemo, useState, useCallback } from "react";
-import { useAuth } from "./AuthContext";
+// src/contexts/CartContext.jsx
+import { createContext, useContext, useEffect, useState, useMemo } from "react";
 import {
-  createCart,
-  getMyCart,
-  addCartItem,
-  updateCartItem,
-  deleteCartItem,
-  deleteCart,
+  crearCarrito,
+  getMiCarrito,
+  borrarCarrito,
+  agregarItemCarrito,
+  updateItemCarrito,
+  borrarItemCarrito,
+  crearPedido,
+  getProduct,
 } from "../api/proPulseApi";
 
-const CartContext = createContext(null);
-export const useCart = () => useContext(CartContext);
+const CartCtx = createContext(null);
+export const useCart = () => useContext(CartCtx);
 
 export default function CartProvider({ children }) {
-  const { user } = useAuth();
-  const [cart, setCart] = useState(null);       // { id_carrito, id_usuario, estado, items: [...] }
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [cartId, setCartId] = useState(null);
+  const [items, setItems] = useState([]);
 
-  const unpack = (resp) => resp?.data ?? resp;
+  // Boot: cargar carrito + detalle
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await getMiCarrito();
+        if (data?.id_carrito) {
+          setCartId(data.id_carrito);
+          if (Array.isArray(data.carrito_detalle)) {
+            setItems(data.carrito_detalle);
+          } else {
+            try {
+              const res = await fetch(`/carrito_detalle?id_carrito=${data.id_carrito}`);
+              const detalles = await res.json();
+              setItems(detalles);
+            } catch {
+              setItems([]);
+            }
+          }
+        }
+      } catch (err) {
+        if (err?.response?.status !== 404) {
+          console.error("Error al obtener carrito:", err);
+        }
+      }
+    })();
+  }, []);
 
-  const refresh = useCallback(async () => {
-    if (!user) { setCart(null); return; }
-    try {
-      setLoading(true); setError(null);
-      const data = unpack(await getMyCart());   // GET /carritos/me
-      setCart(data ?? null);
-    } catch (e) {
-      setCart(null); // si aún no tiene carrito, lo dejamos en null
-    } finally { setLoading(false); }
-  }, [user]);
+  const totals = useMemo(() => {
+    const subtotal = items.reduce(
+      (acc, it) => acc + Number(it.precio_unitario) * Number(it.cantidad),
+      0
+    );
+    return { subtotal, envio: 0, total: subtotal };
+  }, [items]);
 
-  const ensureCart = useCallback(async () => {
-    if (!user) throw new Error("Debes iniciar sesión para usar el carrito");
-    if (cart?.id_carrito) return cart.id_carrito;
-    const data = unpack(await createCart({ id_usuario: user.id })); // POST /carritos
-    setCart((prev) => prev ?? { ...data, items: [] });
+  const ensureCart = async () => {
+    if (cartId) return cartId;
+    const { data } = await crearCarrito({});
+    setCartId(data.id_carrito);
     return data.id_carrito;
-  }, [cart, user]);
-
-  const addItem = useCallback(
-    async ({ id_producto, cantidad = 1, precio_unitario }) => {
-      const id_carrito = await ensureCart();
-      await addCartItem(id_carrito, { id_producto, cantidad, precio_unitario }); // POST /carritos/{id}/items
-      await refresh();
-    },
-    [ensureCart, refresh]
-  );
-
-  const setQty = useCallback(
-    async (id_item, cantidad) => {
-      if (!cart?.id_carrito) return;
-      await updateCartItem(cart.id_carrito, id_item, { cantidad }); // PUT /carritos/{id}/items/{id_item}
-      await refresh();
-    },
-    [cart, refresh]
-  );
-
-  const removeItem = useCallback(
-    async (id_item) => {
-      if (!cart?.id_carrito) return;
-      await deleteCartItem(cart.id_carrito, id_item); // DELETE /carritos/{id}/items/{id_item}
-      await refresh();
-    },
-    [cart, refresh]
-  );
-
-  const clear = useCallback(
-    async () => {
-      if (!cart?.id_carrito) return;
-      await deleteCart(cart.id_carrito); // DELETE /carritos/{id}
-      setCart(null);
-    },
-    [cart]
-  );
-
-  const items = cart?.items ?? [];
-  const count = useMemo(() => items.reduce((n, it) => n + Number(it.cantidad ?? 0), 0), [items]);
-  const total = useMemo(
-    () => items.reduce((t, it) => t + Number(it.subtotal ?? (it.precio_unitario ?? 0) * (it.cantidad ?? 1)), 0),
-    [items]
-  );
-
-  useEffect(() => { refresh(); }, [refresh]);
-
-  const value = {
-    cart, items, count, total,
-    loading, error,
-    refresh, addItem, setQty, removeItem, clear,
   };
 
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+  // ===== Helpers de reglas =====
+  const _esServicio = (ref) => (ref?.tipo ?? null) === "servicio";
+
+  // Revalida contra backend: stock y 1× para servicios
+  const validateItems = async () => {
+    const errores = [];
+    for (const it of items) {
+      try {
+        const { data: p } = await getProduct(it.id_producto);
+        const esServicio = _esServicio(p) || _esServicio(it);
+        const stock = Number.isFinite(p?.stock) ? Number(p.stock) : Infinity;
+        const cant = Number(it.cantidad) || 1;
+
+        if (esServicio && cant !== 1) {
+          errores.push({ id_producto: it.id_producto, motivo: "Servicio: solo 1 por carrito." });
+        }
+        if (Number.isFinite(stock) && cant > stock) {
+          errores.push({
+            id_producto: it.id_producto,
+            motivo: `Stock insuficiente. Disponible: ${stock}.`,
+          });
+        }
+      } catch {
+        errores.push({ id_producto: it.id_producto, motivo: "No se pudo validar el producto." });
+      }
+    }
+    if (errores.length) {
+      const err = new Error("Validación de carrito fallida");
+      err.detalle = errores;
+      throw err;
+    }
+  };
+
+  // ===== Acciones =====
+  const addItem = async (product, qty = 1) => {
+    const id = await ensureCart();
+    const pid = Number(product?.id_producto ?? product?.id);
+    const precio = Number(product?.precio ?? product?.precio_unitario);
+    if (!Number.isFinite(pid)) throw new Error("id de producto inválido");
+    if (!Number.isFinite(precio)) throw new Error("precio inválido");
+    if (!Number.isFinite(qty) || qty <= 0) throw new Error("cantidad inválida");
+
+    const existing = items.find((i) => i.id_producto === pid);
+    const esServicio = _esServicio(product);
+
+    // Regla: servicio = máximo 1
+    if (esServicio && existing) {
+      // ya existe, no sumamos más
+      return existing;
+    }
+
+    if (!existing) {
+      const payload = {
+        id_producto: pid,
+        cantidad: esServicio ? 1 : qty,
+        precio_unitario: precio,
+        // opcionales para mostrar sin volver a pedir: (si tu backend los ignora, no pasa nada)
+        titulo: product.titulo ?? product.nombre ?? undefined,
+        tipo: product.tipo ?? undefined,
+        imagen_url: product.imagen_url ?? product.url_image ?? undefined,
+      };
+      const { data: created } = await agregarItemCarrito(id, payload);
+      setItems((prev) => [...prev, created]);
+      return created;
+    } else {
+      const itemId = existing.id_detalle ?? existing.id_item;
+      const nuevaCantidad = esServicio ? 1 : existing.cantidad + qty;
+      const { data: updated } = await updateItemCarrito(id, itemId, {
+        cantidad: nuevaCantidad,
+      });
+      setItems((prev) =>
+        prev.map((i) => ((i.id_detalle ?? i.id_item) === itemId ? { ...i, ...updated } : i))
+      );
+      return updated;
+    }
+  };
+
+  const updateItem = async (itemId, { cantidad }) => {
+    // Clamp mínimo
+    if (cantidad <= 0) return removeItem(itemId);
+
+    // Si el item es servicio, fuerza a 1
+    const current = items.find((i) => (i.id_detalle ?? i.id_item) === itemId);
+    const esServicio = _esServicio(current);
+    const nextCantidad = esServicio ? 1 : cantidad;
+
+    await updateItemCarrito(cartId, itemId, { cantidad: nextCantidad });
+    setItems((prev) =>
+      prev.map((i) =>
+        (i.id_detalle ?? i.id_item) === itemId ? { ...i, cantidad: nextCantidad } : i
+      )
+    );
+  };
+
+  const removeItem = async (itemId) => {
+    await borrarItemCarrito(cartId, itemId);
+    setItems((prev) => prev.filter((i) => (i.id_detalle ?? i.id_item) !== itemId));
+  };
+
+  const clear = async () => {
+    if (cartId) await borrarCarrito(cartId);
+    setCartId(null);
+    setItems([]);
+  };
+
+  // Checkout con validación previa
+  const checkout = async ({ direccion_envio, metodo_pago = "tarjeta" }) => {
+    await validateItems(); // lanza si hay errores
+    const { data: pedido } = await crearPedido({
+      id_carrito: cartId,
+      direccion_envio,
+      metodo_pago,
+      total: totals.total,
+      // opcional: copia de items para auditoría rápida
+      items: items.map((it) => ({
+        id_producto: it.id_producto,
+        cantidad: it.cantidad,
+        precio_unitario: it.precio_unitario,
+        tipo: it.tipo ?? null,
+        titulo: it.titulo ?? null,
+      })),
+    });
+    await clear();
+    return pedido;
+  };
+
+  return (
+    <CartCtx.Provider
+      value={{
+        cartId,
+        items,
+        totals,
+        addItem,
+        updateItem,
+        removeItem,
+        clear,
+        checkout,
+        validateItems, // útil para una pantalla previa
+      }}
+    >
+      {children}
+    </CartCtx.Provider>
+  );
 }

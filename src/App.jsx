@@ -22,7 +22,7 @@ import ResenaForm from "./vistas/client/ResenaForm";
 import ProfileUser from "./vistas/client/ProfileUser";
 import Pedido from "./vistas/client/Pedido";
 import Favorite from "./vistas/client/Favorite";
-import CarritoPreOrden from "./vistas/client/CarritoPreOrden";
+import CarritoPreOrden from "./vistas/client/Carrito";
 
 // Admin private routes
 import AdminShop from "./vistas/admin/AdminShop";
@@ -42,10 +42,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/productos" element={<Productos />} />
-          <Route path="/producto/:id" element={<Producto />} />
+          <Route path="/productos/:id" element={<Producto />} />
           <Route path="/planes" element={<Planes />} />
           <Route path="/servicios" element={<Servicios />} />
-          <Route path="/servicio/:id" element={<Servicio />} />
+          <Route path="/servicios/:id" element={<Servicio />} />
           <Route path="/contacto" element={<Contacto />} />
 
           {/* Client private routes */}
@@ -90,7 +90,7 @@ function App() {
             }
           />
           <Route
-            path="/carrito-preorden"
+            path="/carrito"
             element={
               <PrivateRoute roles={["admin", "cliente"]}>
                 <CarritoPreOrden />

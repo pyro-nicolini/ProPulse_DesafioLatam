@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { getProducts } from "../api/proPulseApi";
+import { useFadeUp } from "../hooks/useFadeUp";
 
 const colsMap = {
   1: "grid-cols-1",
@@ -22,6 +23,8 @@ export default function Destacados({
   const [err, setErr] = useState(null);
   const colsClass = useMemo(() => colsMap[col] || colsMap[3], [col]);
 
+
+  useFadeUp();
   useEffect(() => {
     (async () => {
       try {
@@ -42,7 +45,7 @@ export default function Destacados({
   if (!items.length) return <div>No hay destacados para mostrar.</div>;
 
   return (
-    <div className="p-1 container-1200">
+    <div className="p-1 container-1200 fade-up visible">
       <h1 className="mb-6">{title}</h1>
 
       <div className={`grid ${colsClass} gap-3`}>
@@ -60,7 +63,6 @@ export default function Destacados({
                   <p>Item destacado</p>
                   <div className="flex gap-1">
                     <button className="btn btn-primary">Ver más</button>
-                    <button className="btn btn-secondary">Agregar</button>
                   </div>
                 </div>
               </Link>
