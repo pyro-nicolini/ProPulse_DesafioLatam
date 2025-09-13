@@ -1,61 +1,113 @@
-// src/vistas/publico/Login.jsx
 import { useState } from "react";
-import { useNavigate, Link, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useFadeUp } from "../../hooks/useFadeUp";
 import { useAuth } from "../../contexts/AuthContext";
 
+import logoColor1 from "../../assets/img/logos/logo_propulse.svg";
+import foto2 from "../../assets/img/ejemplos/nike-running.webp";
+
+const fmtErr = (e) => (e?.response?.data?.error || "Credenciales inválidas");
+
 export default function Login() {
-  const { doLogin } = useAuth();
+  useFadeUp();
   const nav = useNavigate();
-  const loc = useLocation();
-  const from = loc.state?.from?.pathname || "/";
+  const { login } = useAuth();
 
   const [form, setForm] = useState({ email: "", password: "" });
+  const [showPass, setShowPass] = useState(false);
   const [err, setErr] = useState(null);
-
-  const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (e) => {
     e.preventDefault();
     setErr(null);
+    setLoading(true);
     try {
-      await doLogin(form);
-      nav(from, { replace: true });
-    } catch (e2) {
-      setErr(e2.message || "Error al iniciar sesión");
+      await login(form);
+      nav("/"); // redirige donde quieras
+    } catch (e) {
+      setErr(fmtErr(e));
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div style={{ maxWidth: 380, margin: "2rem auto" }}>
-      <h1>Ingresar</h1>
-      <p style={{ fontSize: 12, opacity: 0.7 }}>
-        Demo: <b>maria@mail.com</b> / <b>maria@mail.com</b>
-      </p>
-      {err && <div style={{ color: "crimson", marginBottom: 8 }}>{err}</div>}
-      <form onSubmit={onSubmit}>
-        <input
-          name="email"
-          type="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={onChange}
-          style={{ display: "block", width: "100%", marginBottom: 8, padding: 8 }}
-          required
-        />
-        <input
-          name="password"
-          type="password"
-          placeholder="Contraseña"
-          value={form.password}
-          onChange={onChange}
-          style={{ display: "block", width: "100%", marginBottom: 8, padding: 8 }}
-          required
-        />
-        <button type="submit" style={{ width: "100%", padding: 10 }}>Entrar</button>
-      </form>
-      <p style={{ marginTop: 8, fontSize: 14 }}>
-        ¿No tienes cuenta? <Link to="/register">Crear cuenta</Link>
-      </p>
+    <div className="container glass p-2 fade-up">
+      <div className="container-cards grid grid-cols-2 gap-2">
+        {/* Columna izquierda: formulario */}
+        <div className="card fade-up">
+          <div className="flex items-center gap-1 mb-2">
+            <img src={logoColor1} alt="ProPulse" className="png w-16 h-16" />
+            <div>
+              <h1 className="text-gradient m-0">Ingresar</h1>
+              <p className="subtitle m-0">Bienvenido de vuelta</p>
+            </div>
+          </div>
+
+          <form onSubmit={onSubmit} className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1">
+              <label htmlFor="email">Email</label>
+              <input
+                id="email"
+                type="email"
+                className="input border p-2"
+                placeholder="tu@correo.com"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                required
+              />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label htmlFor="password">Contraseña</label>
+              <div className="flex gap-1">
+                <input
+                  id="password"
+                  type={showPass ? "text" : "password"}
+                  className="input border p-2 flex-1"
+                  placeholder="••••••••"
+                  value={form.password}
+                  onChange={(e) =>
+                    setForm({ ...form, password: e.target.value })
+                  }
+                  required
+                />
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShowPass((v) => !v)}
+                  aria-label="Mostrar/Ocultar contraseña"
+                >
+                  {showPass ? "Ocultar" : "Ver"}
+                </button>
+              </div>
+            </div>
+
+            {err && <p className="text-red-600 text-sm">{String(err)}</p>}
+
+            <button className="btn btn-primary" disabled={loading}>
+              {loading ? "Ingresando..." : "Ingresar"}
+            </button>
+
+            <p className="text-sm mt-1">
+              ¿No tienes cuenta?&nbsp;
+              <Link to="/register" className="underline">
+                Crear una cuenta
+              </Link>
+            </p>
+          </form>
+        </div>
+
+        {/* Columna derecha: imagen/branding */}
+        <div className="card card-bg-img fade-up text-shadow relative overflow-hidden"
+             style={{ backgroundImage: `url(${foto2})` }}>
+          <div className="relative z-20 flex-col justify-end h-full">
+            <h3 className="m-0">Tu progreso, en movimiento</h3>
+            <p className="m-0">Compra productos y servicios deportivos al instante.</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

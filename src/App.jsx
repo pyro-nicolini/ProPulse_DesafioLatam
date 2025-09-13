@@ -50,7 +50,7 @@ function App() {
 
           {/* Client private routes */}
           <Route
-            path="/resumen-orden"
+            path="/checkout/resumen"
             element={
               <PrivateRoute roles={["admin", "cliente"]}>
                 <ResumenOrden />

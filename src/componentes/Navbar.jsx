@@ -2,44 +2,40 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import logo from "../assets/img/logos/logo_color_w.png";
 import CartWidget from "../componentes/CartWidget";
-
 import { useAuth } from "../contexts/AuthContext";
+// import { logout } from "../api/proPulseApi";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const { user, doLogout } = useAuth();
+  const { user, logout: doLogout } = useAuth();
+
+  const toggleMenu = () => setOpen((prev) => !prev);
+  const closeMenu = () => setOpen(false);
 
   return (
     <nav className="navbar">
       <div className="navbar container">
-        <Link className="nav-link" to="/profile-user">
+        <Link className="nav-link" to="/profile-user" onClick={closeMenu}>
           <img className="navbar-brand" src={logo} alt="ProPulse" />
         </Link>
 
         <button
           aria-label="Abrir menú"
-          onClick={() => setOpen((prev) => !prev)}
+          aria-expanded={open}
+          aria-controls="mobile-menu"
+          onClick={toggleMenu}
           className="nav-toggle"
         >
           &#9776;
         </button>
-          <Link className="nav-link" to="/cart">
-            <CartWidget />
-          </Link>
+
+        {user ? <CartWidget /> : null}
+
         <div className="nav-links">
           {user ? (
             <>
               <span className="nav-link">Hola, {user.nombre}</span>
-              {console.log(user)}
-              <button
-                onClick={doLogout}
-                className="nav-link btn-logout"
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                }}
-              >
+              <button onClick={doLogout} className="nav-link btn-logout">
                 Salir
               </button>
             </>
@@ -53,6 +49,7 @@ const Navbar = () => {
               </Link>
             </>
           )}
+
           <Link className="nav-link" to="/">
             Home
           </Link>
@@ -68,59 +65,43 @@ const Navbar = () => {
           <Link className="nav-link" to="/contacto">
             Contacto
           </Link>
-
         </div>
       </div>
 
       {/* Mobile menu */}
       {open && (
-        <div className="mobile-menu">
-          <Link to="/" onClick={() => setOpen(false)}>
+        <div id="mobile-menu" className="mobile-menu">
+          <Link to="/" onClick={closeMenu}>
             Home
           </Link>
+
           {user ? (
             <>
-
-              <button
-                onClick={() => {
-                  doLogout();
-                  setOpen(false);
-                }}
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                }}
-              >
+              <span className="nav-link">Hola, {user.nombre}</span>
+              <button onClick={doLogout} className="nav-link btn-logout">
                 Salir
               </button>
             </>
           ) : (
             <>
-              <Link to="/login" onClick={() => setOpen(false)}>
+              <Link to="/login" onClick={closeMenu}>
                 Login
               </Link>
-              <Link to="/register" onClick={() => setOpen(false)}>
+              <Link to="/register" onClick={closeMenu}>
                 Register
               </Link>
             </>
           )}
-          <Link to="/productos" onClick={() => setOpen(false)}>
+
+          <Link to="/productos" onClick={closeMenu}>
             Productos
           </Link>
-          <Link to="/servicios" onClick={() => setOpen(false)}>
+          <Link to="/servicios" onClick={closeMenu}>
             Servicios
           </Link>
-          <Link to="/contacto" onClick={() => setOpen(false)}>
+          <Link to="/contacto" onClick={closeMenu}>
             Contacto
           </Link>
-          <button
-            onClick={doLogout}
-            className="nav-link btn-logout"
-            style={{ background: "none", border: "none", cursor: "pointer" }}
-          >
-            Salir
-          </button>
         </div>
       )}
     </nav>

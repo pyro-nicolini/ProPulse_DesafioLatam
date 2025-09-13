@@ -1,203 +1,240 @@
 // src/contexts/CartContext.jsx
-import { createContext, useContext, useEffect, useState, useMemo } from "react";
 import {
-  crearCarrito,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { useAuth } from "./AuthContext";
+import {
   getMiCarrito,
-  borrarCarrito,
   agregarItemCarrito,
   updateItemCarrito,
   borrarItemCarrito,
+  updateCarrito,
   crearPedido,
-  getProduct,
 } from "../api/proPulseApi";
 
 const CartCtx = createContext(null);
 export const useCart = () => useContext(CartCtx);
 
 export default function CartProvider({ children }) {
+  const { user, token } = useAuth();
   const [cartId, setCartId] = useState(null);
-  const [items, setItems] = useState([]);
+  // itemsRaw: lo que viene del backend (puede ser items o carrito_detalle)
+  const [itemsRaw, setItemsRaw] = useState([]);
 
-  // Boot: cargar carrito + detalle
+  // Mutex simple por id_producto para evitar condiciones de carrera
+  const inflight = useRef(new Map()); // id_producto -> Promise en curso
+
+  // ---------- cargar carrito ----------
   useEffect(() => {
     (async () => {
+      if (!user || (typeof token !== "undefined" && !token)) {
+        setCartId(null);
+        setItemsRaw([]);
+        return;
+      }
       try {
         const { data } = await getMiCarrito();
-        if (data?.id_carrito) {
-          setCartId(data.id_carrito);
-          if (Array.isArray(data.carrito_detalle)) {
-            setItems(data.carrito_detalle);
-          } else {
-            try {
-              const res = await fetch(`/carrito_detalle?id_carrito=${data.id_carrito}`);
-              const detalles = await res.json();
-              setItems(detalles);
-            } catch {
-              setItems([]);
-            }
-          }
+        const id = data?.id_carrito ?? data?.id ?? null;
+        // Siempre usar items del backend, si existen
+        let detalle = [];
+        if (Array.isArray(data?.items) && data.items.length) {
+          detalle = data.items;
+        } else if (
+          Array.isArray(data?.carrito_detalle) &&
+          data.carrito_detalle.length
+        ) {
+          detalle = data.carrito_detalle;
         }
-      } catch (err) {
-        if (err?.response?.status !== 404) {
-          console.error("Error al obtener carrito:", err);
-        }
+        setCartId(id);
+        setItemsRaw(detalle);
+      } catch (e) {
+        console.error("getMiCarrito() falló:", e);
+        setCartId(null);
+        setItems([]);
       }
     })();
-  }, []);
+  }, [user, token]);
 
+  const refresh = async () => {
+    try {
+      const { data } = await getMiCarrito();
+      const id = data?.id_carrito ?? data?.id ?? null;
+      const detalle = data?.items ?? data?.carrito_detalle ?? [];
+      setCartId(id);
+      setItemsRaw(Array.isArray(detalle) ? detalle : []);
+      return { id, detalle: Array.isArray(detalle) ? detalle : [] };
+    } catch (e) {
+      console.error("refresh carrito falló:", e);
+      return { id: null, detalle: [] };
+    }
+  };
+
+  // ============ núcleo anti-409 ============
+  // Garantiza que, si ya existe la línea en server, se actualiza; si no existe, se crea.
+  const ensureLine = async (id_producto, deltaCantidad = 1) => {
+    if (!cartId) return;
+
+    // serializar por producto para evitar overlap de clicks
+    const running = inflight.current.get(id_producto);
+    if (running) return running; // reusar la promesa en curso
+
+    const job = (async () => {
+      // 1) siempre parte con estado FRESCO del server
+      const { detalle: d1 } = await refresh();
+      const linea1 = d1.find(
+        (it) => Number(it.id_producto) === Number(id_producto)
+      );
+
+      if (linea1) {
+        const id_linea = linea1.id_detalle ?? linea1.id_item;
+        const nueva = Number(linea1.cantidad || 1) + Number(deltaCantidad || 0);
+        await updateItem(id_linea, { cantidad: nueva });
+        return;
+      }
+
+      // 2) si NO existe, intenta CREAR (en mock enviamos id_carrito en el body)
+      try {
+        await agregarItemCarrito(cartId, {
+          id_carrito: cartId,
+          id_producto,
+          cantidad: Math.max(1, Number(deltaCantidad) || 1),
+        });
+        await refresh();
+        return;
+      } catch (e) {
+        // 3) si el server dice ITEM_DUPLICADO (409), refresca y ACTUALIZA la real
+        if (e?.response?.status === 409) {
+          const { detalle: d2 } = await refresh();
+          const linea2 = d2.find(
+            (it) => Number(it.id_producto) === Number(id_producto)
+          );
+          if (linea2) {
+            const id_linea = linea2.id_detalle ?? linea2.id_item;
+            const nueva =
+              Number(linea2.cantidad || 1) +
+              Math.max(1, Number(deltaCantidad) || 1);
+            await updateItem(id_linea, { cantidad: nueva });
+            return;
+          }
+        }
+        console.error("ensureLine error:", e);
+      }
+    })();
+
+    inflight.current.set(id_producto, job);
+    try {
+      await job;
+    } finally {
+      inflight.current.delete(id_producto);
+    }
+  };
+
+  // ---------- acciones públicas ----------
+  const addItem = async (product, qty = 1) => {
+    if (!cartId) return;
+    const id_producto = Number(product?.id_producto ?? product?.id);
+    if (!Number.isFinite(id_producto)) {
+      console.error("addItem: id_producto inválido", product);
+      return;
+    }
+    await ensureLine(id_producto, Math.max(1, Number(qty) || 1));
+  };
+
+  const updateItem = async (id_detalle, patch) => {
+    if (!cartId) return;
+    const body = { ...patch };
+    if (typeof body.cantidad === "number" && body.cantidad < 1) {
+      return removeItem(id_detalle);
+    }
+    try {
+      const { data } = await updateItemCarrito(cartId, id_detalle, body);
+      if (data && (data.id_detalle ?? data.id_item) === id_detalle) {
+        setItemsRaw((prev) =>
+          prev.map((it) =>
+            (it.id_detalle ?? it.id_item) === id_detalle ? data : it
+          )
+        );
+      } else {
+        await refresh();
+      }
+    } catch (e) {
+      console.error("updateItem error:", e);
+      await refresh();
+    }
+  };
+
+  const removeItem = async (id_detalle) => {
+    if (!cartId) return;
+    try {
+      await borrarItemCarrito(cartId, id_detalle);
+      setItemsRaw((prev) =>
+        prev.filter((it) => (it.id_detalle ?? it.id_item) !== id_detalle)
+      );
+    } catch (e) {
+      console.error("removeItem error:", e);
+      await refresh();
+    }
+  };
+
+  const clearCart = async () => {
+    if (!cartId) return;
+    try {
+      await updateCarrito(cartId, { estado: "cancelado" });
+      await refresh();
+    } catch (e) {
+      console.error("clearCart error:", e);
+    }
+  };
+
+  const checkout = async () => {
+    if (!cartId) return null;
+    try {
+      const { data } = await crearPedido({ id_carrito: cartId });
+      await refresh();
+      return data;
+    } catch (e) {
+      console.error("checkout error:", e);
+      return null;
+    }
+  };
+
+  // ---------- totales ----------
   const totals = useMemo(() => {
-    const subtotal = items.reduce(
-      (acc, it) => acc + Number(it.precio_unitario) * Number(it.cantidad),
+    const subtotal = itemsRaw.reduce(
+      (acc, it) =>
+        acc +
+        Number(
+          it.subtotal ??
+            Number(it.precio_unitario || 0) * Number(it.cantidad || 0)
+        ),
       0
     );
-    return { subtotal, envio: 0, total: subtotal };
-  }, [items]);
+    return { subtotal, cantidad_lineas: itemsRaw.length };
+  }, [itemsRaw]);
 
-  const ensureCart = async () => {
-    if (cartId) return cartId;
-    const { data } = await crearCarrito({});
-    setCartId(data.id_carrito);
-    return data.id_carrito;
-  };
-
-  // ===== Helpers de reglas =====
-  const _esServicio = (ref) => (ref?.tipo ?? null) === "servicio";
-
-  // Revalida contra backend: stock y 1× para servicios
-  const validateItems = async () => {
-    const errores = [];
-    for (const it of items) {
-      try {
-        const { data: p } = await getProduct(it.id_producto);
-        const esServicio = _esServicio(p) || _esServicio(it);
-        const stock = Number.isFinite(p?.stock) ? Number(p.stock) : Infinity;
-        const cant = Number(it.cantidad) || 1;
-
-        if (esServicio && cant !== 1) {
-          errores.push({ id_producto: it.id_producto, motivo: "Servicio: solo 1 por carrito." });
-        }
-        if (Number.isFinite(stock) && cant > stock) {
-          errores.push({
-            id_producto: it.id_producto,
-            motivo: `Stock insuficiente. Disponible: ${stock}.`,
-          });
-        }
-      } catch {
-        errores.push({ id_producto: it.id_producto, motivo: "No se pudo validar el producto." });
-      }
-    }
-    if (errores.length) {
-      const err = new Error("Validación de carrito fallida");
-      err.detalle = errores;
-      throw err;
-    }
-  };
-
-  // ===== Acciones =====
-  const addItem = async (product, qty = 1) => {
-    const id = await ensureCart();
-    const pid = Number(product?.id_producto ?? product?.id);
-    const precio = Number(product?.precio ?? product?.precio_unitario);
-    if (!Number.isFinite(pid)) throw new Error("id de producto inválido");
-    if (!Number.isFinite(precio)) throw new Error("precio inválido");
-    if (!Number.isFinite(qty) || qty <= 0) throw new Error("cantidad inválida");
-
-    const existing = items.find((i) => i.id_producto === pid);
-    const esServicio = _esServicio(product);
-
-    // Regla: servicio = máximo 1
-    if (esServicio && existing) {
-      // ya existe, no sumamos más
-      return existing;
-    }
-
-    if (!existing) {
-      const payload = {
-        id_producto: pid,
-        cantidad: esServicio ? 1 : qty,
-        precio_unitario: precio,
-        // opcionales para mostrar sin volver a pedir: (si tu backend los ignora, no pasa nada)
-        titulo: product.titulo ?? product.nombre ?? undefined,
-        tipo: product.tipo ?? undefined,
-        imagen_url: product.imagen_url ?? product.url_image ?? undefined,
-      };
-      const { data: created } = await agregarItemCarrito(id, payload);
-      setItems((prev) => [...prev, created]);
-      return created;
-    } else {
-      const itemId = existing.id_detalle ?? existing.id_item;
-      const nuevaCantidad = esServicio ? 1 : existing.cantidad + qty;
-      const { data: updated } = await updateItemCarrito(id, itemId, {
-        cantidad: nuevaCantidad,
-      });
-      setItems((prev) =>
-        prev.map((i) => ((i.id_detalle ?? i.id_item) === itemId ? { ...i, ...updated } : i))
-      );
-      return updated;
-    }
-  };
-
-  const updateItem = async (itemId, { cantidad }) => {
-    // Clamp mínimo
-    if (cantidad <= 0) return removeItem(itemId);
-
-    // Si el item es servicio, fuerza a 1
-    const current = items.find((i) => (i.id_detalle ?? i.id_item) === itemId);
-    const esServicio = _esServicio(current);
-    const nextCantidad = esServicio ? 1 : cantidad;
-
-    await updateItemCarrito(cartId, itemId, { cantidad: nextCantidad });
-    setItems((prev) =>
-      prev.map((i) =>
-        (i.id_detalle ?? i.id_item) === itemId ? { ...i, cantidad: nextCantidad } : i
-      )
-    );
-  };
-
-  const removeItem = async (itemId) => {
-    await borrarItemCarrito(cartId, itemId);
-    setItems((prev) => prev.filter((i) => (i.id_detalle ?? i.id_item) !== itemId));
-  };
-
-  const clear = async () => {
-    if (cartId) await borrarCarrito(cartId);
-    setCartId(null);
-    setItems([]);
-  };
-
-  // Checkout con validación previa
-  const checkout = async ({ direccion_envio, metodo_pago = "tarjeta" }) => {
-    await validateItems(); // lanza si hay errores
-    const { data: pedido } = await crearPedido({
-      id_carrito: cartId,
-      direccion_envio,
-      metodo_pago,
-      total: totals.total,
-      // opcional: copia de items para auditoría rápida
-      items: items.map((it) => ({
-        id_producto: it.id_producto,
-        cantidad: it.cantidad,
-        precio_unitario: it.precio_unitario,
-        tipo: it.tipo ?? null,
-        titulo: it.titulo ?? null,
-      })),
-    });
-    await clear();
-    return pedido;
-  };
+  // items: siempre un array de líneas de carrito, sin importar el nombre del campo
+  const items = useMemo(() => {
+    if (Array.isArray(itemsRaw)) return itemsRaw;
+    return [];
+  }, [itemsRaw]);
 
   return (
     <CartCtx.Provider
       value={{
         cartId,
         items,
-        totals,
         addItem,
         updateItem,
         removeItem,
-        clear,
+        clearCart,
         checkout,
-        validateItems, // útil para una pantalla previa
+        totals,
+        refresh,
       }}
     >
       {children}

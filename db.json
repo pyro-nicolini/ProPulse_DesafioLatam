@@ -4,6 +4,7 @@
       "id_usuario": 1,
       "nombre": "admin@admin",
       "email": "admin@admin",
+      "password": "admin@admin",
       "rol": "admin",
       "avatar_url": "https://i.pravatar.cc/150?img=1",
       "fecha_creacion": "2024-10-01T10:00:00Z"
@@ -12,9 +13,46 @@
       "id_usuario": 2,
       "nombre": "cliente@cliente",
       "email": "cliente@cliente",
+      "password": "cliente@cliente",
       "rol": "cliente",
       "avatar_url": "https://i.pravatar.cc/150?img=2",
       "fecha_creacion": "2024-10-01T10:00:00Z"
+    },
+    {
+      "id_usuario": 3,
+      "nombre": "max@max",
+      "email": "max@max",
+      "password": "max@max",
+      "rol": "cliente",
+      "avatar_url": null,
+      "fecha_creacion": "2025-09-13T00:59:30.744Z"
+    },
+    {
+      "id_usuario": 4,
+      "nombre": "max@max2",
+      "email": "max@max2",
+      "password": "max@max2",
+      "rol": "cliente",
+      "avatar_url": null,
+      "fecha_creacion": "2025-09-13T05:07:43.892Z"
+    },
+    {
+      "id_usuario": 5,
+      "nombre": "",
+      "email": "",
+      "password": "",
+      "rol": "cliente",
+      "avatar_url": null,
+      "fecha_creacion": "2025-09-13T05:20:30.495Z"
+    },
+    {
+      "id_usuario": 6,
+      "nombre": "max@max4",
+      "email": "max@max4",
+      "password": "max@max4",
+      "rol": "cliente",
+      "avatar_url": null,
+      "fecha_creacion": "2025-09-13T05:24:59.583Z"
     }
   ],
   "productos": [
@@ -24,7 +62,7 @@
       "titulo": "Mancuernas Ajustables 40kg",
       "descripcion": "Par de mancuernas ajustables ideales para entrenamientos de fuerza.",
       "precio": 120000,
-      "stock": 15,
+      "stock": 11,
       "tipo": "producto",
       "imagen_url": "https://images.unsplash.com/photo-1599058917212-d750089bc07e",
       "destacado": true,
@@ -48,7 +86,7 @@
       "titulo": "Discos Olímpicos 150kg Set",
       "descripcion": "Juego completo de discos olímpicos recubiertos en goma.",
       "precio": 280000,
-      "stock": 8,
+      "stock": 6,
       "tipo": "producto",
       "imagen_url": "https://images.unsplash.com/photo-1605296867304-46d5465a13f1",
       "destacado": true,
@@ -72,7 +110,7 @@
       "titulo": "Banco Plano Ajustable",
       "descripcion": "Banco regulable para press, curl y trabajo de core.",
       "precio": 75000,
-      "stock": 12,
+      "stock": 8,
       "tipo": "producto",
       "imagen_url": "https://images.unsplash.com/photo-1629382364875-4f5bbdd7c3c0",
       "destacado": false,
@@ -84,7 +122,7 @@
       "titulo": "Máquina de Poleas",
       "descripcion": "Máquina de poleas dual con múltiples ejercicios posibles.",
       "precio": 520000,
-      "stock": 3,
+      "stock": 0,
       "tipo": "producto",
       "imagen_url": "https://images.unsplash.com/photo-1558611848-73f7eb4001a1",
       "destacado": true,
@@ -96,7 +134,7 @@
       "titulo": "Cinturón de Levantamiento",
       "descripcion": "Cinturón de cuero reforzado para levantar pesado con seguridad.",
       "precio": 35000,
-      "stock": 25,
+      "stock": 0,
       "tipo": "producto",
       "imagen_url": "https://images.unsplash.com/photo-1605296867304-ebe9e2d3b03b",
       "destacado": false,
@@ -108,7 +146,7 @@
       "titulo": "Cuerda de Batalla",
       "descripcion": "Cuerda gruesa de 15m para entrenamiento de potencia y resistencia.",
       "precio": 48000,
-      "stock": 20,
+      "stock": 2,
       "tipo": "producto",
       "imagen_url": "https://images.unsplash.com/photo-1614313529709-8b9a84c59070",
       "destacado": false,
@@ -120,7 +158,7 @@
       "titulo": "Kettlebells Set 4-32kg",
       "descripcion": "Set completo de kettlebells para entrenamiento funcional.",
       "precio": 180000,
-      "stock": 7,
+      "stock": 4,
       "tipo": "producto",
       "imagen_url": "https://images.unsplash.com/photo-1605296867304-46d5465a13f1",
       "destacado": true,
@@ -263,740 +301,158 @@
     {
       "id_carrito": 1,
       "id_usuario": 2,
-      "estado": "activo",
-      "fecha_creacion": "2024-10-01T10:00:00Z"
+      "estado": "pagado",
+      "fecha_creacion": "2025-09-13T15:46:47.644Z"
     },
     {
       "id_carrito": 2,
       "id_usuario": 1,
       "estado": "activo",
-      "fecha_creacion": "2025-09-12T19:18:13.355Z"
-    },
-    {
-      "id_carrito": 3,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T19:23:49.762Z"
-    },
-    {
-      "id_carrito": 4,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T19:36:28.198Z"
-    },
-    {
-      "id_carrito": 5,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T19:40:51.112Z"
-    },
-    {
-      "id_carrito": 6,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T19:57:42.654Z"
-    },
-    {
-      "id_carrito": 7,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T20:03:47.191Z"
-    },
-    {
-      "id_carrito": 8,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T20:08:43.610Z"
-    },
-    {
-      "id_carrito": 9,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T20:08:58.816Z"
-    },
-    {
-      "id_carrito": 10,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T20:12:17.604Z"
-    },
-    {
-      "id_carrito": 11,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T20:14:20.060Z"
-    },
-    {
-      "id_carrito": 12,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T20:15:53.229Z"
-    },
-    {
-      "id_carrito": 13,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T20:21:44.908Z"
-    },
-    {
-      "id_carrito": 14,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T20:25:23.936Z"
-    },
-    {
-      "id_carrito": 15,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T20:26:11.231Z"
-    },
-    {
-      "id_carrito": 16,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T20:26:45.717Z"
-    },
-    {
-      "id_carrito": 17,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T20:32:44.282Z"
-    },
-    {
-      "id_carrito": 18,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T20:33:22.837Z"
-    },
-    {
-      "id_carrito": 19,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T20:33:44.122Z"
-    },
-    {
-      "id_carrito": 20,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T20:34:51.831Z"
-    },
-    {
-      "id_carrito": 21,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T20:49:01.571Z"
-    },
-    {
-      "id_carrito": 22,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T20:59:49.124Z"
-    },
-    {
-      "id_carrito": 23,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T21:03:10.122Z"
-    },
-    {
-      "id_carrito": 24,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T21:04:00.642Z"
-    },
-    {
-      "id_carrito": 25,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T21:14:45.243Z"
-    },
-    {
-      "id_carrito": 26,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T21:17:47.829Z"
-    },
-    {
-      "id_carrito": 27,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T21:25:54.105Z"
-    },
-    {
-      "id_carrito": 28,
-      "id_usuario": 1,
-      "estado": "activo",
-      "fecha_creacion": "2025-09-12T21:27:05.402Z"
+      "fecha_creacion": "2025-09-13T16:41:44.735Z"
     }
   ],
   "carrito_detalle": [
     {
       "id_detalle": 1,
       "id_carrito": 1,
-      "id_producto": 1,
-      "cantidad": 2,
-      "precio_unitario": 120000,
-      "fecha_creacion": "2024-10-01T10:05:00Z"
+      "id_producto": 8,
+      "cantidad": 18,
+      "precio_unitario": 48000,
+      "fecha_creacion": "2025-09-13T15:46:51.369Z"
     },
     {
       "id_detalle": 2,
       "id_carrito": 1,
-      "id_producto": 2,
+      "id_producto": 17,
       "cantidad": 1,
-      "precio_unitario": 95000,
-      "fecha_creacion": "2024-10-01T10:05:00Z"
+      "precio_unitario": 200000,
+      "fecha_creacion": "2025-09-13T15:47:05.645Z"
     },
     {
       "id_detalle": 3,
       "id_carrito": 1,
-      "id_producto": 3,
-      "cantidad": 1,
-      "precio_unitario": 280000,
-      "fecha_creacion": "2024-10-01T10:05:00Z"
+      "id_producto": 1,
+      "cantidad": 4,
+      "precio_unitario": 120000,
+      "fecha_creacion": "2025-09-13T15:54:07.302Z"
     },
     {
       "id_detalle": 4,
-      "id_carrito": 2,
-      "id_producto": 4,
-      "cantidad": 1,
-      "precio_unitario": 450000,
-      "fecha_creacion": "2025-09-12T19:18:13.363Z"
+      "id_carrito": 1,
+      "id_producto": 7,
+      "cantidad": 25,
+      "precio_unitario": 35000,
+      "fecha_creacion": "2025-09-13T16:00:46.104Z"
     },
     {
       "id_detalle": 5,
-      "id_carrito": 2,
+      "id_carrito": 1,
       "id_producto": 9,
-      "cantidad": 1,
+      "cantidad": 3,
       "precio_unitario": 180000,
-      "fecha_creacion": "2025-09-12T19:18:22.441Z"
+      "fecha_creacion": "2025-09-13T16:02:47.017Z"
     },
     {
       "id_detalle": 6,
-      "id_carrito": 2,
+      "id_carrito": 1,
       "id_producto": 6,
-      "cantidad": 1,
+      "cantidad": 3,
       "precio_unitario": 520000,
-      "fecha_creacion": "2025-09-12T19:22:07.086Z"
+      "fecha_creacion": "2025-09-13T16:03:59.808Z"
     },
     {
       "id_detalle": 7,
-      "id_carrito": 2,
-      "id_producto": 16,
-      "cantidad": 1,
-      "precio_unitario": 50000,
-      "fecha_creacion": "2025-09-12T19:22:24.223Z"
+      "id_carrito": 1,
+      "id_producto": 5,
+      "cantidad": 4,
+      "precio_unitario": 75000,
+      "fecha_creacion": "2025-09-13T16:06:27.053Z"
     },
     {
       "id_detalle": 8,
-      "id_carrito": 2,
-      "id_producto": 15,
-      "cantidad": 1,
-      "precio_unitario": 80000,
-      "fecha_creacion": "2025-09-12T19:23:12.752Z"
-    },
-    {
-      "id_detalle": 9,
-      "id_carrito": 3,
-      "id_producto": 15,
-      "cantidad": 1,
-      "precio_unitario": 80000,
-      "fecha_creacion": "2025-09-12T19:23:49.783Z"
-    },
-    {
-      "id_detalle": 10,
-      "id_carrito": 3,
-      "id_producto": 9,
-      "cantidad": 1,
-      "precio_unitario": 180000,
-      "fecha_creacion": "2025-09-12T19:25:32.675Z"
-    },
-    {
-      "id_detalle": 11,
-      "id_carrito": 4,
-      "id_producto": 12,
-      "cantidad": 1,
-      "precio_unitario": 45000,
-      "fecha_creacion": "2025-09-12T19:36:28.228Z"
-    },
-    {
-      "id_detalle": 12,
-      "id_carrito": 5,
-      "id_producto": 7,
-      "cantidad": 1,
-      "precio_unitario": 35000,
-      "fecha_creacion": "2025-09-12T19:40:51.126Z"
-    },
-    {
-      "id_detalle": 13,
-      "id_carrito": 5,
-      "id_producto": 18,
-      "cantidad": 1,
-      "precio_unitario": 40000,
-      "fecha_creacion": "2025-09-12T19:40:55.866Z"
-    },
-    {
-      "id_detalle": 14,
-      "id_carrito": 5,
-      "id_producto": 12,
-      "cantidad": 1,
-      "precio_unitario": 45000,
-      "fecha_creacion": "2025-09-12T19:41:02.009Z"
-    },
-    {
-      "id_detalle": 15,
-      "id_carrito": 5,
-      "id_producto": 2,
-      "cantidad": 1,
-      "precio_unitario": 95000,
-      "fecha_creacion": "2025-09-12T19:41:07.564Z"
-    },
-    {
-      "id_detalle": 16,
-      "id_carrito": 5,
-      "id_producto": 8,
-      "cantidad": 1,
-      "precio_unitario": 48000,
-      "fecha_creacion": "2025-09-12T19:41:11.782Z"
-    },
-    {
-      "id_detalle": 17,
-      "id_carrito": 5,
+      "id_carrito": 1,
       "id_producto": 3,
-      "cantidad": 1,
-      "precio_unitario": 280000,
-      "fecha_creacion": "2025-09-12T19:43:25.217Z"
-    },
-    {
-      "id_detalle": 18,
-      "id_carrito": 5,
-      "id_producto": 6,
-      "cantidad": 1,
-      "precio_unitario": 520000,
-      "fecha_creacion": "2025-09-12T19:43:30.262Z"
-    },
-    {
-      "id_detalle": 19,
-      "id_carrito": 6,
-      "id_producto": 7,
-      "cantidad": 1,
-      "precio_unitario": 35000,
-      "fecha_creacion": "2025-09-12T19:57:42.665Z"
-    },
-    {
-      "id_detalle": 20,
-      "id_carrito": 7,
-      "id_producto": 11,
-      "cantidad": 1,
-      "precio_unitario": 120000,
-      "fecha_creacion": "2025-09-12T20:03:47.215Z"
-    },
-    {
-      "id_detalle": 21,
-      "id_carrito": 7,
-      "id_producto": 1,
-      "cantidad": 1,
-      "precio_unitario": 120000,
-      "fecha_creacion": "2025-09-12T20:03:53.359Z"
-    },
-    {
-      "id_detalle": 22,
-      "id_carrito": 7,
-      "id_producto": 19,
-      "cantidad": 1,
-      "precio_unitario": 30000,
-      "fecha_creacion": "2025-09-12T20:05:17.970Z"
-    },
-    {
-      "id_detalle": 23,
-      "id_carrito": 7,
-      "id_producto": 12,
-      "cantidad": 1,
-      "precio_unitario": 45000,
-      "fecha_creacion": "2025-09-12T20:05:28.632Z"
-    },
-    {
-      "id_detalle": 24,
-      "id_carrito": 7,
-      "id_producto": 17,
-      "cantidad": 1,
-      "precio_unitario": 200000,
-      "fecha_creacion": "2025-09-12T20:05:39.549Z"
-    },
-    {
-      "id_detalle": 25,
-      "id_carrito": 8,
-      "id_producto": 18,
-      "cantidad": 1,
-      "precio_unitario": 40000,
-      "fecha_creacion": "2025-09-12T20:08:43.643Z"
-    },
-    {
-      "id_detalle": 26,
-      "id_carrito": 9,
-      "id_producto": 14,
-      "cantidad": 1,
-      "precio_unitario": 35000,
-      "fecha_creacion": "2025-09-12T20:08:58.842Z"
-    },
-    {
-      "id_detalle": 27,
-      "id_carrito": 9,
-      "id_producto": 8,
-      "cantidad": 13,
-      "precio_unitario": 48000,
-      "fecha_creacion": "2025-09-12T20:09:33.969Z"
-    },
-    {
-      "id_detalle": 28,
-      "id_carrito": 10,
-      "id_producto": 4,
-      "cantidad": 5,
-      "precio_unitario": 450000,
-      "fecha_creacion": "2025-09-12T20:12:34.374Z"
-    },
-    {
-      "id_detalle": 29,
-      "id_carrito": 11,
-      "id_producto": 4,
-      "cantidad": 3,
-      "precio_unitario": 450000,
-      "fecha_creacion": "2025-09-12T20:14:20.069Z"
-    },
-    {
-      "id_detalle": 30,
-      "id_carrito": 11,
-      "id_producto": 1,
-      "cantidad": 11,
-      "precio_unitario": 120000,
-      "fecha_creacion": "2025-09-12T20:14:58.009Z"
-    },
-    {
-      "id_detalle": 31,
-      "id_carrito": 12,
-      "id_producto": 8,
-      "cantidad": 3,
-      "precio_unitario": 48000,
-      "fecha_creacion": "2025-09-12T20:17:52.579Z"
-    },
-    {
-      "id_detalle": 32,
-      "id_carrito": 12,
-      "id_producto": 4,
-      "cantidad": 3,
-      "precio_unitario": 450000,
-      "fecha_creacion": "2025-09-12T20:18:11.956Z"
-    },
-    {
-      "id_detalle": 33,
-      "id_carrito": 13,
-      "id_producto": 3,
-      "cantidad": 8,
-      "precio_unitario": 280000,
-      "fecha_creacion": "2025-09-12T20:21:44.918Z"
-    },
-    {
-      "id_detalle": 34,
-      "id_carrito": 14,
-      "id_producto": 6,
-      "cantidad": 3,
-      "precio_unitario": 520000,
-      "fecha_creacion": "2025-09-12T20:25:23.946Z"
-    },
-    {
-      "id_detalle": 35,
-      "id_carrito": 15,
-      "id_producto": 11,
-      "cantidad": 1,
-      "precio_unitario": 120000,
-      "fecha_creacion": "2025-09-12T20:26:11.252Z"
-    },
-    {
-      "id_detalle": 36,
-      "id_carrito": 16,
-      "id_producto": 3,
-      "cantidad": 3,
-      "precio_unitario": 280000,
-      "fecha_creacion": "2025-09-12T20:29:06.416Z"
-    },
-    {
-      "id_detalle": 37,
-      "id_carrito": 17,
-      "id_producto": 1,
-      "cantidad": 4,
-      "precio_unitario": 120000,
-      "fecha_creacion": "2025-09-12T20:33:09.345Z"
-    },
-    {
-      "id_detalle": 38,
-      "id_carrito": 17,
-      "id_producto": 4,
-      "cantidad": 5,
-      "precio_unitario": 450000,
-      "fecha_creacion": "2025-09-12T20:33:15.103Z"
-    },
-    {
-      "id_detalle": 39,
-      "id_carrito": 18,
-      "id_producto": 4,
       "cantidad": 2,
-      "precio_unitario": 450000,
-      "fecha_creacion": "2025-09-12T20:33:22.846Z"
-    },
-    {
-      "id_detalle": 40,
-      "id_carrito": 19,
-      "id_producto": 4,
-      "cantidad": 5,
-      "precio_unitario": 450000,
-      "fecha_creacion": "2025-09-12T20:33:44.134Z"
-    },
-    {
-      "id_detalle": 41,
-      "id_carrito": 20,
-      "id_producto": 4,
-      "cantidad": 5,
-      "precio_unitario": 450000,
-      "fecha_creacion": "2025-09-12T20:34:51.841Z"
-    },
-    {
-      "id_detalle": 42,
-      "id_carrito": 20,
-      "id_producto": 14,
-      "cantidad": 38,
-      "precio_unitario": 35000,
-      "fecha_creacion": "2025-09-12T20:34:59.949Z"
-    },
-    {
-      "id_detalle": 43,
-      "id_carrito": 20,
-      "id_producto": 2,
-      "cantidad": 10,
-      "precio_unitario": 95000,
-      "fecha_creacion": "2025-09-12T20:39:02.139Z"
-    },
-    {
-      "id_detalle": 44,
-      "id_carrito": 20,
-      "id_producto": 13,
-      "cantidad": 20,
-      "precio_unitario": 60000,
-      "fecha_creacion": "2025-09-12T20:40:10.428Z"
-    },
-    {
-      "id_detalle": 45,
-      "id_carrito": 20,
-      "id_producto": 6,
-      "cantidad": 1,
-      "precio_unitario": 520000,
-      "fecha_creacion": "2025-09-12T20:40:17.443Z"
-    },
-    {
-      "id_detalle": 46,
-      "id_carrito": 21,
-      "id_producto": 3,
-      "cantidad": 7,
       "precio_unitario": 280000,
-      "fecha_creacion": "2025-09-12T20:49:01.581Z"
-    },
-    {
-      "id_detalle": 47,
-      "id_carrito": 21,
-      "id_producto": 1,
-      "cantidad": 13,
-      "precio_unitario": 120000,
-      "fecha_creacion": "2025-09-12T20:49:32.699Z"
-    },
-    {
-      "id_detalle": 48,
-      "id_carrito": 21,
-      "id_producto": 6,
-      "cantidad": 2,
-      "precio_unitario": 520000,
-      "fecha_creacion": "2025-09-12T20:49:51.102Z"
-    },
-    {
-      "id_detalle": 49,
-      "id_carrito": 22,
-      "id_producto": 1,
-      "cantidad": 2,
-      "precio_unitario": 120000,
-      "fecha_creacion": "2025-09-12T20:59:49.133Z"
-    },
-    {
-      "id_detalle": 50,
-      "id_carrito": 22,
-      "id_producto": 18,
-      "cantidad": 1,
-      "precio_unitario": 40000,
-      "fecha_creacion": "2025-09-12T20:59:57.058Z"
-    },
-    {
-      "id_detalle": 51,
-      "id_carrito": 23,
-      "id_producto": 6,
-      "cantidad": 3,
-      "precio_unitario": 520000,
-      "fecha_creacion": "2025-09-12T21:03:10.133Z"
-    },
-    {
-      "id_detalle": 52,
-      "id_carrito": 23,
-      "id_producto": 14,
-      "cantidad": 1,
-      "precio_unitario": 35000,
-      "fecha_creacion": "2025-09-12T21:03:20.794Z"
-    },
-    {
-      "id_detalle": 53,
-      "id_carrito": 24,
-      "id_producto": 19,
-      "cantidad": 1,
-      "precio_unitario": 30000,
-      "fecha_creacion": "2025-09-12T21:04:00.666Z"
-    },
-    {
-      "id_detalle": 54,
-      "id_carrito": 24,
-      "id_producto": 8,
-      "cantidad": 8,
-      "precio_unitario": 48000,
-      "fecha_creacion": "2025-09-12T21:04:24.952Z"
-    },
-    {
-      "id_detalle": 55,
-      "id_carrito": 25,
-      "id_producto": 11,
-      "cantidad": 2,
-      "precio_unitario": 120000,
-      "fecha_creacion": "2025-09-12T21:14:45.267Z"
-    },
-    {
-      "id_detalle": 56,
-      "id_carrito": 25,
-      "id_producto": 14,
-      "cantidad": 4,
-      "precio_unitario": 35000,
-      "fecha_creacion": "2025-09-12T21:15:00.469Z"
-    },
-    {
-      "id_detalle": 57,
-      "id_carrito": 26,
-      "id_producto": 11,
-      "cantidad": 7,
-      "precio_unitario": 120000,
-      "fecha_creacion": "2025-09-12T21:17:47.850Z"
-    },
-    {
-      "id_detalle": 58,
-      "id_carrito": 26,
-      "id_producto": 2,
-      "cantidad": 10,
-      "precio_unitario": 95000,
-      "fecha_creacion": "2025-09-12T21:17:59.513Z"
-    },
-    {
-      "id_detalle": 59,
-      "id_carrito": 27,
-      "id_producto": 17,
-      "cantidad": 1,
-      "precio_unitario": 200000,
-      "fecha_creacion": "2025-09-12T21:25:54.133Z"
-    },
-    {
-      "id_detalle": 60,
-      "id_carrito": 28,
-      "id_producto": 14,
-      "cantidad": 1,
-      "precio_unitario": 35000,
-      "fecha_creacion": "2025-09-12T21:27:05.424Z"
+      "fecha_creacion": "2025-09-13T16:09:11.957Z"
     }
   ],
   "pedidos": [
     {
       "id_pedido": 1,
       "id_usuario": 2,
-      "total": 615000,
+      "id_carrito": 1,
+      "total": 5379000,
       "estado": "pagado",
-      "fecha_pedido": "2024-10-01T10:06:00Z"
+      "fecha_pedido": "2025-09-13T17:12:58.416Z"
     }
   ],
-
   "pedidos_detalle": [
     {
       "id_pedido_detalle": 1,
       "id_pedido": 1,
-      "id_producto": 1,
-      "cantidad": 2,
-      "precio_unitario": 120000,
-      "fecha_creacion": "2024-10-01T10:06:10Z"
+      "id_producto": 8,
+      "cantidad": 18,
+      "precio_unitario": 48000,
+      "fecha_creacion": "2025-09-13T17:12:58.416Z"
     },
     {
       "id_pedido_detalle": 2,
       "id_pedido": 1,
-      "id_producto": 2,
+      "id_producto": 17,
       "cantidad": 1,
-      "precio_unitario": 95000,
-      "fecha_creacion": "2024-10-01T10:06:10Z"
+      "precio_unitario": 200000,
+      "fecha_creacion": "2025-09-13T17:12:58.416Z"
     },
     {
       "id_pedido_detalle": 3,
       "id_pedido": 1,
+      "id_producto": 1,
+      "cantidad": 4,
+      "precio_unitario": 120000,
+      "fecha_creacion": "2025-09-13T17:12:58.416Z"
+    },
+    {
+      "id_pedido_detalle": 4,
+      "id_pedido": 1,
+      "id_producto": 7,
+      "cantidad": 25,
+      "precio_unitario": 35000,
+      "fecha_creacion": "2025-09-13T17:12:58.416Z"
+    },
+    {
+      "id_pedido_detalle": 5,
+      "id_pedido": 1,
+      "id_producto": 9,
+      "cantidad": 3,
+      "precio_unitario": 180000,
+      "fecha_creacion": "2025-09-13T17:12:58.416Z"
+    },
+    {
+      "id_pedido_detalle": 6,
+      "id_pedido": 1,
+      "id_producto": 6,
+      "cantidad": 3,
+      "precio_unitario": 520000,
+      "fecha_creacion": "2025-09-13T17:12:58.416Z"
+    },
+    {
+      "id_pedido_detalle": 7,
+      "id_pedido": 1,
+      "id_producto": 5,
+      "cantidad": 4,
+      "precio_unitario": 75000,
+      "fecha_creacion": "2025-09-13T17:12:58.416Z"
+    },
+    {
+      "id_pedido_detalle": 8,
+      "id_pedido": 1,
       "id_producto": 3,
-      "cantidad": 1,
+      "cantidad": 2,
       "precio_unitario": 280000,
-      "fecha_creacion": "2024-10-01T10:06:10Z"
+      "fecha_creacion": "2025-09-13T17:12:58.416Z"
     }
   ],
-  "resenas": [
-    {
-      "id_resena": 1,
-      "id_usuario": 2,
-      "id_producto": 1,
-      "comentario": "Excelente calidad y ajuste rápido.",
-      "calificacion": 5,
-      "fecha_creacion": "2024-10-05T10:15:00Z"
-    },
-    {
-      "id_resena": 2,
-      "id_usuario": 2,
-      "id_producto": 2,
-      "comentario": "Muy buena barra, sólida y estable.",
-      "calificacion": 4,
-      "fecha_creacion": "2024-10-05T10:20:00Z"
-    },
-    {
-      "id_resena": 3,
-      "id_usuario": 2,
-      "id_producto": 3,
-      "comentario": "Set completo, ideal para progresar.",
-      "calificacion": 5,
-      "fecha_creacion": "2024-10-05T10:25:00Z"
-    }
-  ],
-  "likes": [
-    {
-      "id_like": 1,
-      "id_usuario": 2,
-      "id_producto": 1,
-      "fecha_creacion": "2024-10-02T09:00:00Z"
-    },
-    {
-      "id_like": 2,
-      "id_usuario": 2,
-      "id_producto": 3,
-      "fecha_creacion": "2024-10-02T09:01:00Z"
-    },
-    {
-      "id_like": 3,
-      "id_usuario": 1,
-      "id_producto": 2,
-      "fecha_creacion": "2024-10-02T09:02:00Z"
-    },
-    {
-      "id_like": 4,
-      "id_usuario": 1,
-      "id_producto": 3,
-      "fecha_creacion": "2024-10-02T09:03:00Z"
-    }
-  ]
+  "resenas": [],
+  "likes": []
 }

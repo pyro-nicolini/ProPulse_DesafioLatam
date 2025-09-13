@@ -1,4 +1,6 @@
+// src/componentes/AddCartButton.jsx
 import React, { useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
 import { useCart } from "../contexts/CartContext";
 
 export default function AddCartButton({
@@ -6,65 +8,62 @@ export default function AddCartButton({
   qty = 1,
   children = "Agregar",
 }) {
-  const { items, addItem } = useCart();
+  const { items, addItem, updateItem } = useCart();
+  const { user } = useAuth();
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState("");
 
-  // Buscar si ya está en el carrito
-  const item = items.find(
-    (i) => i.id_producto === (product.id_producto ?? product.id)
-  );
-  const cantidadEnCarrito = item?.cantidad || 0;
+  const notify = (t, ms = 1600) => {
+    setMsg(t);
+    setTimeout(() => setMsg(""), ms);
+  };
 
-  // Stock normal (productos físicos)
-  const maxStock =
-    typeof product.stock === "number" ? product.stock : Infinity;
-  const stockRestante = maxStock - cantidadEnCarrito;
-  const agotado = typeof product.stock === "number" && stockRestante <= 0;
-
-  // Caso especial: servicios (solo 1 permitido)
-  const servicioLimitado =
-    product.tipo === "servicio" && cantidadEnCarrito >= 1;
-
-  const disabled = agotado || servicioLimitado;
-
-  const [feedback, setFeedback] = useState("");
-  const onAdd = () => {
-    if (disabled) {
-      setFeedback(
-        agotado
-          ? "No hay más stock disponible"
-          : "Este servicio solo se puede agregar una vez"
-      );
+  const onAdd = async () => {
+    if (!user) {
+      notify("Inicia sesión para agregar");
       return;
     }
-    addItem(product, qty);
-    setFeedback("");
+
+    const id_producto = Number(product?.id_producto ?? product?.id);
+    if (!Number.isFinite(id_producto)) {
+      console.error("AddCartButton: producto sin id válido", product);
+      notify("Producto inválido");
+      return;
+    }
+
+    const cantidad = Math.max(1, Number(qty) || 1);
+    const existente = items.find((i) => Number(i.id_producto) === id_producto);
+
+    setBusy(true);
+    try {
+      if (existente) {
+        const id_linea = existente.id_detalle ?? existente.id_item;
+        const nueva = Number(existente.cantidad || 1) + cantidad;
+        await updateItem(id_linea, { cantidad: nueva });
+        notify("Cantidad actualizada");
+      } else {
+        await addItem(product, cantidad); // el backend fija precio_unitario/subtotal
+        notify("Agregado al carrito");
+      }
+    } catch (e) {
+      console.error("AddCartButton error:", e);
+      notify("No se pudo agregar");
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "start" }}>
+    <div className="flex flex-col gap-1">
       <button
         className="btn btn-primary"
         onClick={onAdd}
-        disabled={disabled}
+        disabled={busy}
+        title="Agregar al carrito"
       >
-        🛒 {children}{" "}
-        {agotado && "(Sin stock)"} {servicioLimitado && "(Ya agregado)"}
+        {busy ? "Agregando…" : "🛒"} {children}
       </button>
-
-      {typeof product.stock === "number" && (
-        <h3
-          style={{
-            fontSize: "0.9em",
-            color: agotado ? "yellow" : "#ffffffff",
-          }}
-        >
-          Stock restante: {stockRestante <= 0 ? 0 : stockRestante}
-        </h3>
-      )}
-
-      {feedback && (
-        <span style={{ color: "red", fontSize: "0.9em" }}>{feedback}</span>
-      )}
+      {msg && <small className="text-gray-600">{msg}</small>}
     </div>
   );
 }

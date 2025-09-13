@@ -50,29 +50,11 @@ export default function ConfirmBar({ items, totals }) {
       return;
     }
 
-    try {
-      // 2) Crear pedido (borrador/pendiente) y avanzar
-      const payload = {
-        estado: "pendiente",
-        total: totals?.total ?? 0,
-        items: items.map((it) => ({
-          id_producto: it.id_producto,
-          cantidad: Number(it.cantidad) || 1,
-          precio_unitario: Number(it.precio_unitario) || 0,
-          tipo: it.tipo ?? null,
-          titulo: it.titulo ?? null,
-        })),
-      };
-      const { data } = await crearPedido(payload); // Debes tener este endpoint en tu proPulseApi
-      const idPedido = data?.id ?? data?.id_pedido ?? "";
-      navigate(idPedido ? `/checkout/${idPedido}` : "/checkout", {
-        state: { pedido: data || payload },
-      });
-    } catch {
-      setErrores([{ id: "general", motivo: "No se pudo crear el pedido." }]);
-    } finally {
-      setLoading(false);
-    }
+    // 2) Navegar a resumen de orden, pasando items y totales
+    navigate("/checkout/resumen", {
+      state: { items, totals },
+    });
+    setLoading(false);
   };
 
   return (
@@ -87,8 +69,30 @@ export default function ConfirmBar({ items, totals }) {
 
       <div className="card w-full">
         <div>
-          <p>Subtotal: {new Intl.NumberFormat("es-CL",{style:"currency",currency:"CLP",maximumFractionDigits:0}).format(totals?.subtotal || 0)}</p>
-          <p>Total: {new Intl.NumberFormat("es-CL",{style:"currency",currency:"CLP",maximumFractionDigits:0}).format(totals?.total || 0)}</p>
+          <p>
+            Subtotal:{" "}
+            {new Intl.NumberFormat("es-CL", {
+              style: "currency",
+              currency: "CLP",
+              maximumFractionDigits: 0,
+            }).format(totals?.subtotal || 0)}
+          </p>
+          <p>
+            Impuesto 19%:{" "}
+            {new Intl.NumberFormat("es-CL", {
+              style: "currency",
+              currency: "CLP",
+              maximumFractionDigits: 0,
+            }).format(totals?.subtotal * 0.19 || 0)}
+          </p>
+          <p>
+            Total:{" "}
+            {new Intl.NumberFormat("es-CL", {
+              style: "currency",
+              currency: "CLP",
+              maximumFractionDigits: 0,
+            }).format(totals?.subtotal * 1.19 || 0)}
+          </p>
         </div>
 
         <label>
@@ -100,7 +104,10 @@ export default function ConfirmBar({ items, totals }) {
           <span> Acepto términos y condiciones</span>
         </label>
 
-        <button onClick={onConfirm} disabled={!acepto || loading || !items.length}>
+        <button
+          onClick={onConfirm}
+          disabled={!acepto || loading || !items.length}
+        >
           {loading ? "Confirmando..." : "Confirmar y continuar"}
         </button>
       </div>

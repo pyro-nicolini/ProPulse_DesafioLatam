@@ -1,59 +1,123 @@
-// src/vistas/publico/Register.jsx
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useFadeUp } from "../../hooks/useFadeUp";
 import { useAuth } from "../../contexts/AuthContext";
 
-export default function Register() {
-  const { doRegister } = useAuth();
-  const nav = useNavigate();
-  const [form, setForm] = useState({ nombre: "", email: "", password: "" });
+import logoColor3 from "../../assets/img/logos/logo_propulse_white.png";
+import foto4 from "../../assets/img/ejemplos/run.jpeg";
 
-  const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+const fmtErr = (e) => (e?.response?.data?.error || "Error al registrarse");
+
+export default function Register() {
+  useFadeUp();
+  const nav = useNavigate();
+  const { register } = useAuth();
+
+  const [form, setForm] = useState({ nombre: "", email: "", password: "" });
+  const [showPass, setShowPass] = useState(false);
+  const [err, setErr] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    await doRegister(form);
-    nav("/", { replace: true });
+    setErr(null);
+    setLoading(true);
+    try {
+      await register(form);
+      nav("/"); // a donde prefieras
+    } catch (e) {
+      setErr(fmtErr(e));
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div style={{ maxWidth: 380, margin: "2rem auto" }}>
-      <h1>Crear cuenta (demo)</h1>
-      <p style={{ fontSize: 12, opacity: 0.7 }}>
-        En esta demo, siempre quedas como <b>Maria Lopez</b>.
-      </p>
-      <form onSubmit={onSubmit}>
-        <input
-          name="nombre"
-          placeholder="Nombre"
-          value={form.nombre}
-          onChange={onChange}
-          style={{ display: "block", width: "100%", marginBottom: 8, padding: 8 }}
-          required
-        />
-        <input
-          name="email"
-          type="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={onChange}
-          style={{ display: "block", width: "100%", marginBottom: 8, padding: 8 }}
-          required
-        />
-        <input
-          name="password"
-          type="password"
-          placeholder="Contraseña"
-          value={form.password}
-          onChange={onChange}
-          style={{ display: "block", width: "100%", marginBottom: 8, padding: 8 }}
-          required
-        />
-        <button type="submit" style={{ width: "100%", padding: 10 }}>Crear cuenta</button>
-      </form>
-      <p style={{ marginTop: 8, fontSize: 14 }}>
-        ¿Ya tienes cuenta? <Link to="/login">Ingresar</Link>
-      </p>
+    <div className="container glass p-2 fade-up">
+      <div className="container-cards grid grid-cols-2 gap-2">
+        {/* Columna izquierda: imagen/branding */}
+        <div
+          className="card card-bg-img fade-up text-shadow relative overflow-hidden"
+          style={{ backgroundImage: `url(${foto4})` }}
+        >
+          <div className="relative z-20 flex-col justify-end h-full">
+            <img src={logoColor3} alt="ProPulse" className="png3 w-24 h-24 bg-gradient-primary mb-2" />
+            <h3 className="m-0">Crea tu cuenta</h3>
+            <p className="m-0">Únete y comienza a impulsar tu entrenamiento.</p>
+          </div>
+        </div>
+
+        {/* Columna derecha: formulario */}
+        <div className="card fade-up">
+          <h1 className="text-gradient m-0">Registro</h1>
+          <p className="subtitle m-0">Completa tus datos</p>
+
+          <form onSubmit={onSubmit} className="flex flex-col gap-2 mt-2">
+            <div className="flex flex-col gap-1">
+              <label htmlFor="nombre">Nombre</label>
+              <input
+                id="nombre"
+                type="text"
+                className="input border p-2"
+                placeholder="Tu nombre"
+                value={form.nombre}
+                onChange={(e) => setForm({ ...form, nombre: e.target.value })}
+                required
+              />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label htmlFor="email">Email</label>
+              <input
+                id="email"
+                type="email"
+                className="input border p-2"
+                placeholder="tu@correo.com"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                required
+              />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label htmlFor="password">Contraseña</label>
+              <div className="flex gap-1">
+                <input
+                  id="password"
+                  type={showPass ? "text" : "password"}
+                  className="input border p-2 flex-1"
+                  placeholder="••••••••"
+                  value={form.password}
+                  onChange={(e) =>
+                    setForm({ ...form, password: e.target.value })
+                  }
+                  required
+                />
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShowPass((v) => !v)}
+                >
+                  {showPass ? "Ocultar" : "Ver"}
+                </button>
+              </div>
+            </div>
+
+            {err && <p className="text-red-600 text-sm">{String(err)}</p>}
+
+            <button className="btn btn-primary" disabled={loading}>
+              {loading ? "Creando cuenta..." : "Crear cuenta"}
+            </button>
+
+            <p className="text-sm mt-1">
+              ¿Ya tienes cuenta?&nbsp;
+              <Link to="/login" className="underline">
+                Ingresar
+              </Link>
+            </p>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
