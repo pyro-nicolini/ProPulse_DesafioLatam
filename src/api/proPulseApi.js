@@ -38,13 +38,15 @@ export const setProductoDestacado = (id_producto, destacado) =>
   API.put(`/admin/productos/${id_producto}/destacado`, { destacado });
 
 /* ========== CARRITOS (id_carrito / id_detalle) ========== */
-// export const crearCarrito  = (data = {})                   => API.post("/carritos", data);  SOLO PARA TEST
+// export const crearCarrito  = (data = {}) => API.post("/carritos", data); // SOLO PARA TEST
 export const getMiCarrito = async () => {
+  // Si NO estás apuntando a "/api", asumimos modo MOCK (json-server)
   if (!import.meta.env.VITE_API_BASE_URL?.includes("/api")) {
     // MOCK: busca por id_usuario y crea si no existe
     const user = JSON.parse(sessionStorage.getItem("loggedUser") || "{}");
     const id_usuario = user.id_usuario || user.id;
     if (!id_usuario) throw new Error("No hay usuario logueado");
+
     const { data } = await API.get("/carritos", { params: { id_usuario } });
     if (Array.isArray(data) && data.length > 0) {
       return { data: data[0] };
@@ -52,14 +54,14 @@ export const getMiCarrito = async () => {
     const nuevo = await API.post("/carritos", {
       id_usuario,
       estado: "activo",
-      fecha_creacion: new Date().toISOString(),
+      fecha_creacion: new Date().toISOString(), // solo mock
     });
     return { data: nuevo.data };
   }
-  // BACKEND REAL: usa /carritos/me
+  // BACKEND REAL: usa /carritos/me (el backend debe resolver el usuario por token)
   return API.get("/carritos/me");
 };
-// (si dejas crearCarrito, úsalo solo para tests; en prod no se usa)
+
 export const updateCarrito = (id_carrito, data) =>
   API.put(`/carritos/${id_carrito}`, data);
 export const borrarCarrito = (id_carrito) =>
@@ -74,8 +76,12 @@ export const borrarItemCarrito = (id_carrito, id_detalle) =>
 
 /* ========== PEDIDOS (id_pedido) ========== */
 export const crearPedido = (data) => API.post("/pedidos", data);
-export const historialPedidos = (params) => API.get("/pedidos", { params });
 export const obtenerPedido = (id_pedido) => API.get(`/pedidos/${id_pedido}`);
+
+// Detalle de pedido (ajuste: usar /pedidos_detalle)
+export const pedidoDetalle = (id_pedido) =>
+  API.get(`/pedidos_detalle`, { params: { id_pedido } });
+
 export const adminUpdatePedido = (id_pedido, data) =>
   API.put(`/admin/pedidos/${id_pedido}`, data);
 
@@ -86,7 +92,11 @@ export const postResena = (id_producto, data) =>
   API.post(`/productos/${id_producto}/resenas`, data);
 
 export const addLike = (id_producto) => API.post("/favoritos", { id_producto });
-export const getLikes = () => API.get("/favoritos?_expand=producto");
+
+// Ajuste: usar params para el expand
+export const getLikes = () =>
+  API.get("/favoritos", { params: { _expand: "producto" } });
+
 export const deleteLike = (id_like) => API.delete(`/favoritos/${id_like}`);
 export const getLikesCount = (id_producto) =>
   API.get(`/productos/${id_producto}/likes`);

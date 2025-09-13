@@ -62,7 +62,7 @@
       "titulo": "Mancuernas Ajustables 40kg",
       "descripcion": "Par de mancuernas ajustables ideales para entrenamientos de fuerza.",
       "precio": 120000,
-      "stock": 15,
+      "stock": 11,
       "tipo": "producto",
       "imagen_url": "https://images.unsplash.com/photo-1599058917212-d750089bc07e",
       "destacado": true,
@@ -86,7 +86,7 @@
       "titulo": "Discos Olímpicos 150kg Set",
       "descripcion": "Juego completo de discos olímpicos recubiertos en goma.",
       "precio": 280000,
-      "stock": 8,
+      "stock": 6,
       "tipo": "producto",
       "imagen_url": "https://images.unsplash.com/photo-1605296867304-46d5465a13f1",
       "destacado": true,
@@ -110,7 +110,7 @@
       "titulo": "Banco Plano Ajustable",
       "descripcion": "Banco regulable para press, curl y trabajo de core.",
       "precio": 75000,
-      "stock": 12,
+      "stock": 8,
       "tipo": "producto",
       "imagen_url": "https://images.unsplash.com/photo-1629382364875-4f5bbdd7c3c0",
       "destacado": false,
@@ -122,7 +122,7 @@
       "titulo": "Máquina de Poleas",
       "descripcion": "Máquina de poleas dual con múltiples ejercicios posibles.",
       "precio": 520000,
-      "stock": 3,
+      "stock": 0,
       "tipo": "producto",
       "imagen_url": "https://images.unsplash.com/photo-1558611848-73f7eb4001a1",
       "destacado": true,
@@ -134,7 +134,7 @@
       "titulo": "Cinturón de Levantamiento",
       "descripcion": "Cinturón de cuero reforzado para levantar pesado con seguridad.",
       "precio": 35000,
-      "stock": 25,
+      "stock": 0,
       "tipo": "producto",
       "imagen_url": "https://images.unsplash.com/photo-1605296867304-ebe9e2d3b03b",
       "destacado": false,
@@ -146,7 +146,7 @@
       "titulo": "Cuerda de Batalla",
       "descripcion": "Cuerda gruesa de 15m para entrenamiento de potencia y resistencia.",
       "precio": 48000,
-      "stock": 20,
+      "stock": 2,
       "tipo": "producto",
       "imagen_url": "https://images.unsplash.com/photo-1614313529709-8b9a84c59070",
       "destacado": false,
@@ -158,7 +158,7 @@
       "titulo": "Kettlebells Set 4-32kg",
       "descripcion": "Set completo de kettlebells para entrenamiento funcional.",
       "precio": 180000,
-      "stock": 7,
+      "stock": 4,
       "tipo": "producto",
       "imagen_url": "https://images.unsplash.com/photo-1605296867304-46d5465a13f1",
       "destacado": true,
@@ -301,30 +301,158 @@
     {
       "id_carrito": 1,
       "id_usuario": 2,
+      "estado": "pagado",
+      "fecha_creacion": "2025-09-13T15:46:47.644Z"
+    },
+    {
+      "id_carrito": 2,
+      "id_usuario": 1,
       "estado": "activo",
-      "fecha_creacion": "2025-09-13T06:32:02.409Z"
+      "fecha_creacion": "2025-09-13T16:41:44.735Z"
     }
   ],
   "carrito_detalle": [
     {
       "id_detalle": 1,
       "id_carrito": 1,
-      "id_producto": 3,
-      "cantidad": 1,
-      "precio_unitario": 280000,
-      "fecha_creacion": "2025-09-13T07:19:55.057Z"
+      "id_producto": 8,
+      "cantidad": 18,
+      "precio_unitario": 48000,
+      "fecha_creacion": "2025-09-13T15:46:51.369Z"
     },
     {
       "id_detalle": 2,
       "id_carrito": 1,
-      "id_producto": 14,
+      "id_producto": 17,
       "cantidad": 1,
+      "precio_unitario": 200000,
+      "fecha_creacion": "2025-09-13T15:47:05.645Z"
+    },
+    {
+      "id_detalle": 3,
+      "id_carrito": 1,
+      "id_producto": 1,
+      "cantidad": 4,
+      "precio_unitario": 120000,
+      "fecha_creacion": "2025-09-13T15:54:07.302Z"
+    },
+    {
+      "id_detalle": 4,
+      "id_carrito": 1,
+      "id_producto": 7,
+      "cantidad": 25,
       "precio_unitario": 35000,
-      "fecha_creacion": "2025-09-13T07:20:50.509Z"
+      "fecha_creacion": "2025-09-13T16:00:46.104Z"
+    },
+    {
+      "id_detalle": 5,
+      "id_carrito": 1,
+      "id_producto": 9,
+      "cantidad": 3,
+      "precio_unitario": 180000,
+      "fecha_creacion": "2025-09-13T16:02:47.017Z"
+    },
+    {
+      "id_detalle": 6,
+      "id_carrito": 1,
+      "id_producto": 6,
+      "cantidad": 3,
+      "precio_unitario": 520000,
+      "fecha_creacion": "2025-09-13T16:03:59.808Z"
+    },
+    {
+      "id_detalle": 7,
+      "id_carrito": 1,
+      "id_producto": 5,
+      "cantidad": 4,
+      "precio_unitario": 75000,
+      "fecha_creacion": "2025-09-13T16:06:27.053Z"
+    },
+    {
+      "id_detalle": 8,
+      "id_carrito": 1,
+      "id_producto": 3,
+      "cantidad": 2,
+      "precio_unitario": 280000,
+      "fecha_creacion": "2025-09-13T16:09:11.957Z"
     }
   ],
-  "pedidos": [],
-  "pedidos_detalle": [],
+  "pedidos": [
+    {
+      "id_pedido": 1,
+      "id_usuario": 2,
+      "id_carrito": 1,
+      "total": 5379000,
+      "estado": "pagado",
+      "fecha_pedido": "2025-09-13T17:12:58.416Z"
+    }
+  ],
+  "pedidos_detalle": [
+    {
+      "id_pedido_detalle": 1,
+      "id_pedido": 1,
+      "id_producto": 8,
+      "cantidad": 18,
+      "precio_unitario": 48000,
+      "fecha_creacion": "2025-09-13T17:12:58.416Z"
+    },
+    {
+      "id_pedido_detalle": 2,
+      "id_pedido": 1,
+      "id_producto": 17,
+      "cantidad": 1,
+      "precio_unitario": 200000,
+      "fecha_creacion": "2025-09-13T17:12:58.416Z"
+    },
+    {
+      "id_pedido_detalle": 3,
+      "id_pedido": 1,
+      "id_producto": 1,
+      "cantidad": 4,
+      "precio_unitario": 120000,
+      "fecha_creacion": "2025-09-13T17:12:58.416Z"
+    },
+    {
+      "id_pedido_detalle": 4,
+      "id_pedido": 1,
+      "id_producto": 7,
+      "cantidad": 25,
+      "precio_unitario": 35000,
+      "fecha_creacion": "2025-09-13T17:12:58.416Z"
+    },
+    {
+      "id_pedido_detalle": 5,
+      "id_pedido": 1,
+      "id_producto": 9,
+      "cantidad": 3,
+      "precio_unitario": 180000,
+      "fecha_creacion": "2025-09-13T17:12:58.416Z"
+    },
+    {
+      "id_pedido_detalle": 6,
+      "id_pedido": 1,
+      "id_producto": 6,
+      "cantidad": 3,
+      "precio_unitario": 520000,
+      "fecha_creacion": "2025-09-13T17:12:58.416Z"
+    },
+    {
+      "id_pedido_detalle": 7,
+      "id_pedido": 1,
+      "id_producto": 5,
+      "cantidad": 4,
+      "precio_unitario": 75000,
+      "fecha_creacion": "2025-09-13T17:12:58.416Z"
+    },
+    {
+      "id_pedido_detalle": 8,
+      "id_pedido": 1,
+      "id_producto": 3,
+      "cantidad": 2,
+      "precio_unitario": 280000,
+      "fecha_creacion": "2025-09-13T17:12:58.416Z"
+    }
+  ],
   "resenas": [],
   "likes": []
 }

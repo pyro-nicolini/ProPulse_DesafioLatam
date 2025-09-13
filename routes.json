@@ -1,28 +1,24 @@
 {
-  "/usuarios": "/usuarios",
-  "/usuarios/:id": "/usuarios/:id",
-
-  "/productos": "/productos",
-  "/productos/:id": "/productos/:id",
+  "/auth/register": "/__mock_auth_register",
+  "/auth/login": "/__mock_auth_login",
+  "/auth/me": "/__mock_auth_me",
+  "/auth/logout": "/__mock_auth_logout",
 
   "/admin/productos": "/productos",
-  "/admin/productos/:id": "/productos/:id",
-  "/admin/productos/:id/destacado": "/productos/:id",
+  "/admin/productos/:id_producto": "/productos/:id_producto",
+  "/admin/productos/:id_producto/destacado": "/productos/:id_producto",
 
-  "/carritos": "/carritos",
-  "/carritos/:id": "/carritos/:id",
-  "/carritos/me": "/carritos?id_usuario=1",
-  "/carritos/:id/items": "/carrito_detalle?id_carrito=:id",
+  "/admin/pedidos/:id_pedido": "/pedidos/:id_pedido",
 
-  "/pedidos": "/pedidos",
-  "/pedidos/:id": "/pedidos/:id",
-  "/admin/pedidos/:id": "/pedidos/:id",
+  "/carritos/:id_carrito/items": "/carrito_detalle?id_carrito=:id_carrito",
+  "/carritos/:id_carrito/items/:id_detalle": "/carrito_detalle/:id_detalle",
 
-  "/productos/:id/resenas": "/resenas?id_producto=:id",
-  "/resenas": "/resenas",
-  "/resenas/:id": "/resenas/:id",
+  "/productos/:id_producto/resenas": "/resenas?id_producto=:id_producto",
 
   "/favoritos": "/favoritos",
-  "/favoritos/:id": "/favoritos/:id",
-  "/favoritos/producto/:id_producto": "/favoritos?id_producto=:id_producto"
+  "/favoritos/:id_like": "/favoritos/:id_like",
+
+  "/pedidos_detalle": "/pedidos_detalle",
+
+  "/productos/:id_producto/likes": "/favoritos?id_producto=:id_producto"
 }
